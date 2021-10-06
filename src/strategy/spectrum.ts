@@ -1,57 +1,52 @@
-import Rx from "../rx";
-import { AnimationStrategy } from "./interfaces";
+import { Reader } from "fp-ts/es6/Reader"
+import Konva from "konva"
+import Rx from "../rx"
+import { AnimationStrategy } from "./interfaces"
 
-export const spectrumStrategy: AnimationStrategy.MutationFactory = analyser => ctx =>
-	analyser.frequency.pipe(
-		Rx.tap(d => {
-			const bufferLength = analyser.frequencyBinCount
-			const WIDTH = document.body.clientWidth
-			const HEIGHT = document.body.clientHeight
-			ctx.clearRect(0, 0, WIDTH, HEIGHT)
-			ctx.fillStyle = 'rgb(0, 0, 0)';
-			ctx.fillRect(0, 0, WIDTH, HEIGHT);
-			const barWidth = (WIDTH / bufferLength) * 2.5;
-			let barHeight;
-			let x = 0;
-			for (let i = 0; i < bufferLength; i++) {
-				barHeight = d[i] * 2;
-				ctx.fillStyle = 'rgb(' + (barHeight + 100) + ',50,50)';
-				ctx.fillRect(x, HEIGHT - barHeight, barWidth, barHeight);
-				x += barWidth + 1;
-			}
-		})
-	)
+export interface SpectrumStrategyConfig {
+	background?: Konva.RectConfig
+	bar?: Konva.RectConfig
+}
+export const spectrumStrategy: Reader<SpectrumStrategyConfig, AnimationStrategy.MutationFactory> =
+	config => audio => stage => {
+		const layer = new Konva.Layer()
+		stage.add(layer)
 
-export const sineStrategy: AnimationStrategy.MutationFactory = analyser => ctx =>
-	analyser.timeDomain.pipe(
-		Rx.tap(data => {
-			const bufferLength = analyser.frequencyBinCount
-			const WIDTH = document.body.clientWidth
-			ctx.fillStyle = 'rgb(200, 200, 200)';
-			ctx.fillRect(0, 0, WIDTH, 100);
-			ctx.lineWidth = 2;
-			ctx.strokeStyle = 'rgb(0, 0, 0)';
+		return audio.frequency.pipe(
+			Rx.tap(d => {
+				layer.destroyChildren()
+				const bufferLength = audio.analyser.frequencyBinCount
+				const width = config.background?.width || stage.width()
+				const height = config.background?.height || stage.height()
 
-			ctx.beginPath();
+				const background = new Konva.Rect({
+					width,
+					height,
+					fill: 'black',
+					x: 0,
+					y: 0,
+					...config.background
+				})
 
-			var sliceWidth = WIDTH * 1.0 / bufferLength;
-			var x = 0;
+				layer.add(background)
 
-			for (var i = 0; i < bufferLength; i++) {
+				const barWidth = (width / bufferLength) * 2.5;
+				let barHeight;
+				let x = 0;
+				for (let i = 0; i < bufferLength; i++) {
+					barHeight = d[i] * 2;
+					const bar = new Konva.Rect({
+						fill: `rgb(${barHeight + 100},50,50)`,
+						...config.bar,
+						x,
+						y: height - barHeight,
+						width: barWidth,
+						height: barHeight,
+					})
 
-				var v = data[i] / 128.0;
-				var y = v * 100 / 2;
-
-				if (i === 0) {
-					ctx.moveTo(x, y);
-				} else {
-					ctx.lineTo(x, y);
+					layer.add(bar)
+					x += barWidth + 1;
 				}
-
-				x += sliceWidth;
-			}
-
-			ctx.lineTo(WIDTH, 100 / 2);
-			ctx.stroke();
-		})
-	)
+			})
+		)
+	}

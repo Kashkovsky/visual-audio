@@ -6,13 +6,15 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-	"dev": "parcel index.html"
+    "dev": "parcel index.html"
   },
   "dependencies": {
     "@grammarly/focal": "^0.8.5",
     "fp-ts": "^2.11.1",
+    "konva": "^8.2.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-konva": "^17.0.2-5",
     "rxjs": "^7.3.0"
   },
   "devDependencies": {

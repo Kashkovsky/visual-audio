@@ -33,8 +33,8 @@ export namespace Sound {
 		}
 	}
 
-	export const createFor = (logic: R.Reader<AudioContext, Rx.Observable<any>>): Rx.Observable<void> =>
-		create().context.pipe(Rx.switchMap(logic), Rx.mapTo(void 0))
+	export const createFor = <T>(logic: R.Reader<AudioContext, Rx.Observable<T>>): Rx.Observable<T> =>
+		create().context.pipe(Rx.switchMap(logic))
 
 	export namespace UserMedia {
 		export const create: RTE.ReaderTaskEither<MediaStreamConstraints, Error, MediaStream> =
@@ -43,10 +43,9 @@ export namespace Sound {
 
 	export interface AnalysedNode<T extends AudioNode = AudioNode> {
 		readonly node: T
+		readonly analyser: AnalyserNode,
 		readonly timeDomain: Rx.Observable<AnalysisData>
 		readonly frequency: Rx.Observable<AnalysisData>
-		readonly frequencyBinCount: number
-		readonly fftSize: number
 	}
 
 	export namespace AnalysedNode {
@@ -83,7 +82,7 @@ export namespace Sound {
 					Rx.scan((acc) => (node.getByteFrequencyData(acc), acc), new Uint8Array(node.fftSize))
 				)
 
-				return { node, timeDomain, frequency, fftSize: node.fftSize, frequencyBinCount: node.frequencyBinCount }
+				return { node, timeDomain, frequency, analyser: node }
 			}
 
 		export const fromUserMedia = (config: AnalyserConfig) => (ctx: AudioContext) => pipe(
