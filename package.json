@@ -1,0 +1,26 @@
+{
+  "name": "visual-audio",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Denys Kashkovskyi",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+	"dev": "parcel index.html"
+  },
+  "dependencies": {
+    "@grammarly/focal": "^0.8.5",
+    "fp-ts": "^2.11.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "rxjs": "^7.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^16.7.1",
+    "@types/react": "^17.0.19",
+    "@types/react-dom": "^17.0.9",
+    "@types/webpack-env": "^1.16.2",
+    "parcel-bundler": "^1.12.5",
+    "typescript": "^4.3.5"
+  }
+}
