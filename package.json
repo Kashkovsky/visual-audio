@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "parcel index.html",
     "prettier:lint-staged": "prettier --write",
-    "eslint:lint-staged": "eslint --max-warnings 0 --fix"
+    "eslint:lint-staged": "eslint --max-warnings 0 --fix",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@grammarly/focal": "^0.8.5",
@@ -27,6 +28,7 @@
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "eslint": "^7.32.0",
+    "husky": "^7.0.2",
     "lint-staged": "^11.2.0",
     "parcel-bundler": "^1.12.5",
     "prettier": "^2.4.1",
