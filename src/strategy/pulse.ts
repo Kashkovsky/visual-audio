@@ -15,16 +15,13 @@ export const pulseStrategy: Reader<PulseStrategyConfig, AnimationStrategy.Mutati
     const layer = new Konva.Layer()
     stage.add(layer)
     return audio.frequency.pipe(
-      Rx.map(
-        AnalysisData.Frequency.filter(
-          AnalysisData.Frequency.Fraction.subBass,
-          AnalysisData.Frequency.Fraction.bass
-        )
-      ),
+      Rx.map(AnalysisData.Frequency.pick(AnalysisData.Frequency.Fraction.subBass)),
+      Rx.map(AnalysisData.gate(150)),
       Rx.tap(data => {
         layer.destroyChildren()
 
-        const size = data.reduce((a, c) => a + c, 0) / data.length
+        const size = AnalysisData.mean(data)
+
         const circle = new Konva.Circle({
           x: stage.width() / 2,
           y: stage.height() / 2,

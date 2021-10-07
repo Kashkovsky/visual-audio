@@ -15,6 +15,7 @@
     "@grammarly/focal": "^0.8.5",
     "fp-ts": "^2.11.1",
     "konva": "^8.2.2",
+    "mathjs": "^9.5.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-konva": "^17.0.2-5",
@@ -36,8 +37,7 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "yarn eslint:lint-staged",
-      "prettier:lint-staged"
+      "yarn eslint:lint-staged"
     ]
   }
 }

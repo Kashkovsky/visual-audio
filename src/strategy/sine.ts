@@ -10,7 +10,7 @@ export const sineStrategy: Reader<SineStrategyConfig, AnimationStrategy.Mutation
     const layer = new Konva.Layer()
     stage.add(layer)
 
-    return audio.timeDomain.pipe(
+    return audio.waveform.pipe(
       Rx.tap(data => {
         layer.destroyChildren()
         const bufferLength = audio.analyser.fftSize

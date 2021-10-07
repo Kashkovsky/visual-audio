@@ -54,7 +54,7 @@ export namespace Sound {
   export interface AnalysedNode<T extends AudioNode = AudioNode> {
     readonly node: T
     readonly analyser: AnalyserNode
-    readonly timeDomain: Rx.Observable<AnalysisData.TimeDomain>
+    readonly waveform: Rx.Observable<AnalysisData.Waveform>
     readonly frequency: Rx.Observable<AnalysisData.Frequency>
   }
 
@@ -90,10 +90,10 @@ export namespace Sound {
         node.smoothingTimeConstant = smoothingTimeConstant
         node.fftSize = fftSize
 
-        const timeDomain = FRAMES.pipe(
+        const waveform = FRAMES.pipe(
           Rx.scan(
             acc => (node.getByteTimeDomainData(acc), acc),
-            AnalysisData.TimeDomain.create(node.fftSize)
+            AnalysisData.Waveform.create(node.fftSize)
           )
         )
 
@@ -104,7 +104,7 @@ export namespace Sound {
           )
         )
 
-        return { node, timeDomain, frequency, analyser: node }
+        return { node, waveform: waveform, frequency, analyser: node }
       }
 
     export const fromUserMedia =
