@@ -54,8 +54,8 @@ export namespace Sound {
   export interface AnalysedNode<T extends AudioNode = AudioNode> {
     readonly node: T
     readonly analyser: AnalyserNode
-    readonly timeDomain: Rx.Observable<AnalysisData>
-    readonly frequency: Rx.Observable<AnalysisData>
+    readonly timeDomain: Rx.Observable<AnalysisData.TimeDomain>
+    readonly frequency: Rx.Observable<AnalysisData.Frequency>
   }
 
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -91,11 +91,17 @@ export namespace Sound {
         node.fftSize = fftSize
 
         const timeDomain = FRAMES.pipe(
-          Rx.scan(acc => (node.getByteTimeDomainData(acc), acc), new Uint8Array(node.fftSize))
+          Rx.scan(
+            acc => (node.getByteTimeDomainData(acc), acc),
+            AnalysisData.TimeDomain.create(node.fftSize)
+          )
         )
 
         const frequency = FRAMES.pipe(
-          Rx.scan(acc => (node.getByteFrequencyData(acc), acc), new Uint8Array(node.fftSize))
+          Rx.scan(
+            acc => (node.getByteFrequencyData(acc), acc),
+            AnalysisData.Frequency.create(node.fftSize)
+          )
         )
 
         return { node, timeDomain, frequency, analyser: node }

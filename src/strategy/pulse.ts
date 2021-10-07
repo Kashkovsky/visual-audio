@@ -14,7 +14,7 @@ export const pulseStrategy: Reader<PulseStrategyConfig, AnimationStrategy.Mutati
   stage => {
     const layer = new Konva.Layer()
     stage.add(layer)
-    return audio.timeDomain.pipe(
+    return audio.frequency.pipe(
       Rx.map(
         AnalysisData.Frequency.filter(
           AnalysisData.Frequency.Fraction.subBass,
