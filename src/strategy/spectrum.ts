@@ -47,6 +47,7 @@ export const spectrumStrategy: Reader<SpectrumStrategyConfig, AnimationStrategy.
           layer.add(bar)
           x += barWidth + 1
         }
-      })
+      }),
+      Rx.mapTo(void 0)
     )
   }

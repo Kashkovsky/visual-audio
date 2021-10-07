@@ -1,10 +1,11 @@
-import { Lazy, pipe } from 'fp-ts/lib/function'
+import { Lazy, pipe } from 'fp-ts/es6/function'
 import * as R from 'fp-ts/es6/Reader'
 import * as TE from 'fp-ts/es6/TaskEither'
 import * as RTE from 'fp-ts/es6/ReaderTaskEither'
 import Rx from '../rx'
 import { FRAMES } from '../animation'
 import * as E from 'fp-ts/es6/Either'
+import { AnalysisData } from './analysis-data'
 
 export interface Sound {
   readonly context: Rx.Observable<AudioContext>
@@ -12,7 +13,6 @@ export interface Sound {
 }
 
 export namespace Sound {
-  export type AnalysisData = Uint8Array
   const ctor =
     window.AudioContext ||
     (window as unknown as { webkitAudioContext: AudioContext }).webkitAudioContext ||
@@ -130,8 +130,8 @@ export namespace Sound {
         )
 
     export const attachAnimation =
-      (animation: R.Reader<AnalysedNode, Rx.Observable<AnalysisData>>) =>
-      (analyzedNode: Rx.Observable<AnalysedNode>): Rx.Observable<AnalysisData> =>
+      (animation: R.Reader<AnalysedNode, Rx.Observable<void>>) =>
+      (analyzedNode: Rx.Observable<AnalysedNode>): Rx.Observable<void> =>
         analyzedNode.pipe(Rx.switchMap(animation))
   }
 }

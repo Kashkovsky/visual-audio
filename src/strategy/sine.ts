@@ -7,7 +7,6 @@ type SineStrategyConfig = Konva.LineConfig
 
 export const sineStrategy: Reader<SineStrategyConfig, AnimationStrategy.MutationFactory> =
   config => audio => stage => {
-    audio.analyser.fftSize = 256
     const layer = new Konva.Layer()
     stage.add(layer)
 
@@ -35,6 +34,7 @@ export const sineStrategy: Reader<SineStrategyConfig, AnimationStrategy.Mutation
         })
 
         layer.add(line)
-      })
+      }),
+      Rx.mapTo(void 0)
     )
   }

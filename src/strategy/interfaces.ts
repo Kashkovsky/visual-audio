@@ -1,6 +1,6 @@
 import { Sound } from '../audio'
 import * as R from 'fp-ts/es6/Reader'
-import { pipe } from 'fp-ts/lib/function'
+import { pipe } from 'fp-ts/es6/function'
 import Rx from '../rx'
 import Konva from 'konva'
 
@@ -10,8 +10,8 @@ export interface AnimationStrategy {
 }
 
 export namespace AnimationStrategy {
-  export type Mutation = R.Reader<Konva.Stage, Rx.Observable<Sound.AnalysisData>>
-  export type MutationFactory = (analyser: Sound.AnalysedNode) => Mutation
+  export type Mutation = R.Reader<Konva.Stage, Rx.Observable<void>>
+  export type MutationFactory = R.Reader<Sound.AnalysedNode, Mutation>
   export const create =
     (mutation: MutationFactory) =>
     (analyser: Sound.AnalysedNode): AnimationStrategy => ({
@@ -21,7 +21,7 @@ export namespace AnimationStrategy {
 
   export const render =
     () =>
-    (strategy: AnimationStrategy): Rx.Observable<Sound.AnalysisData> => {
+    (strategy: AnimationStrategy): Rx.Observable<void> => {
       const stage = new Konva.Stage({
         container: 'root',
         width: window.innerWidth,

@@ -1,5 +1,5 @@
 import Rx from './index'
-import * as O from 'fp-ts/lib/Option'
+import * as O from 'fp-ts/es6/Option'
 import { Atom } from '@grammarly/focal'
 
 export function compactMap<T, U>(

@@ -1,5 +1,6 @@
 import { Reader } from 'fp-ts/es6/Reader'
 import Konva from 'konva'
+import { AnalysisData } from '../audio'
 import Rx from '../rx'
 import { AnimationStrategy } from './interfaces'
 
@@ -13,8 +14,13 @@ export const pulseStrategy: Reader<PulseStrategyConfig, AnimationStrategy.Mutati
   stage => {
     const layer = new Konva.Layer()
     stage.add(layer)
-
     return audio.timeDomain.pipe(
+      Rx.map(
+        AnalysisData.Frequency.filter(
+          AnalysisData.Frequency.Fraction.subBass,
+          AnalysisData.Frequency.Fraction.bass
+        )
+      ),
       Rx.tap(data => {
         layer.destroyChildren()
 
@@ -26,6 +32,7 @@ export const pulseStrategy: Reader<PulseStrategyConfig, AnimationStrategy.Mutati
           stroke
         })
         layer.add(circle)
-      })
+      }),
+      Rx.mapTo(void 0)
     )
   }
