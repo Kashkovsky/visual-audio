@@ -40,7 +40,7 @@ export namespace Sound {
   }
 
   export const createFor = <T>(logic: R.Reader<AudioContext, Rx.Observable<T>>): Rx.Observable<T> =>
-    create().context.pipe(Rx.switchMap(logic))
+    Sound.create().context.pipe(Rx.switchMap(logic))
 
   export namespace UserMedia {
     export const create: RTE.ReaderTaskEither<MediaStreamConstraints, Error, MediaStream> =
@@ -113,7 +113,7 @@ export namespace Sound {
         pipe(
           UserMedia.create({ audio: true }),
           TE.map(stream => ctx.createMediaStreamSource(stream)),
-          TE.map(pipe(ctx, create(config), connectToSource))
+          TE.map(pipe(ctx, AnalysedNode.create(config), AnalysedNode.connectToSource))
         )
 
     export const fromUserMediaToOut =
@@ -121,7 +121,7 @@ export namespace Sound {
       (ctx: AudioContext): Rx.Observable<Sound.AnalysedNode> =>
         pipe(
           ctx,
-          fromUserMedia(config),
+          AnalysedNode.fromUserMedia(config),
           TE.map(Sound.AnalysedNode.connectToDestination(ctx.destination)),
           t => Rx.from(t()),
           Rx.switchMap(

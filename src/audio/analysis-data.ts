@@ -3,6 +3,7 @@ import { flow, pipe } from 'fp-ts/es6/function'
 import { NonEmptyArray } from 'fp-ts/es6/NonEmptyArray'
 import { Reader } from 'fp-ts/es6/Reader'
 import { Opaque } from '~utils'
+
 export type AnalysisData = AnalysisData.Frequency | AnalysisData.TimeDomain
 
 export namespace AnalysisData {
@@ -29,7 +30,7 @@ export namespace AnalysisData {
       pipe([...data], A.chunksOf(Math.floor(data.length / Object.keys(Fraction).length)))
 
     export const filter = (...fractions: Fraction[]): Reader<AnalysisData.Frequency, number[]> =>
-      flow(toFractions, frequencies =>
+      flow(AnalysisData.Frequency.toFractions, frequencies =>
         pipe(
           fractions,
           A.map(fraction => frequencies[fraction]),
