@@ -10,6 +10,9 @@ import { FRAMES } from './frames'
  * @param unitsPerMillisecond The number of units to progress per millisecond
  * @param frames The frame source, an observable of milliseconds elapsed since start. {@see FRAMES}
  */
-export function velocity(unitsPerMillisecond: number, frames: Rx.Observable<number> = FRAMES) {
+export function velocity(
+  unitsPerMillisecond: number,
+  frames: Rx.Observable<number> = FRAMES
+): Rx.Observable<number> {
   return frames.pipe(Rx.map(elapsed => elapsed * unitsPerMillisecond))
 }

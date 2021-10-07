@@ -3,7 +3,7 @@ import Konva from 'konva'
 import Rx from '../rx'
 import { AnimationStrategy } from './interfaces'
 
-interface SineStrategyConfig extends Konva.LineConfig {}
+type SineStrategyConfig = Konva.LineConfig
 
 export const sineStrategy: Reader<SineStrategyConfig, AnimationStrategy.MutationFactory> =
   config => audio => stage => {
@@ -19,7 +19,7 @@ export const sineStrategy: Reader<SineStrategyConfig, AnimationStrategy.Mutation
         const sliceWidth = (width * 1.0) / bufferLength
 
         let x = 0
-        let points = []
+        const points = []
         for (let i = 0; i < bufferLength; i++) {
           const v = data[i] / 128.0
           const y = (v * 100) / 2

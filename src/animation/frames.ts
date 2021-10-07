@@ -3,7 +3,7 @@ import Rx from '../rx'
 /**
  * An alternating array of Subscribers and their start times.
  */
-let _subscribers: (Rx.Subscriber<number> | number)[] = []
+const _subscribers: (Rx.Subscriber<number> | number)[] = []
 
 let active = false
 let id = -1

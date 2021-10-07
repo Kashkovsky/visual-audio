@@ -1,3 +1,4 @@
+import { Endomorphism } from 'fp-ts/es6/Endomorphism'
 import Rx from '../rx'
 import { duration } from './duration'
 import { FRAMES } from './frames'
@@ -25,7 +26,7 @@ export interface TweenConfig {
   /**
    * An optional easing function
    */
-  easing?: (input: number) => number // TODO: create a type.
+  easing?: Endomorphism<number>
 }
 
 /**
@@ -42,8 +43,7 @@ export function tween({
   duration: ms,
   easing = Rx.identity,
   frames = FRAMES
-}: TweenConfig) {
+}: TweenConfig): Rx.Observable<number> {
   const diff = end - start
-  // TODO: This may need to be optimized later
   return duration(ms, frames).pipe(Rx.map(d => easing(d) * diff + start))
 }

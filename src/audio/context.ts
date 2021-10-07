@@ -8,15 +8,15 @@ import * as E from 'fp-ts/es6/Either'
 
 export interface Sound {
   readonly context: Rx.Observable<AudioContext>
-  readonly state: Rx.Observable<any>
+  readonly state: Rx.Observable<AudioContextState>
 }
 
 export namespace Sound {
   export type AnalysisData = Uint8Array
   const ctor =
     window.AudioContext ||
-    ((window as any).webkitAudioContext as AudioContext) ||
-    ((window as any).mozAudioContext as AudioContext)
+    (window as unknown as { webkitAudioContext: AudioContext }).webkitAudioContext ||
+    (window as unknown as { mozAudioContext: AudioContext }).mozAudioContext
   export const create: Lazy<Sound> = () => {
     const context = new ctor()
     const observableContext =
@@ -35,7 +35,7 @@ export namespace Sound {
 
     return {
       context: observableContext,
-      state: Rx.fromEvent(context, 'onstatechange')
+      state: Rx.fromEvent<AudioContextState>(context, 'onstatechange')
     }
   }
 
@@ -58,6 +58,7 @@ export namespace Sound {
     readonly frequency: Rx.Observable<AnalysisData>
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   export namespace AnalysedNode {
     export interface AnalyserConfig {
       readonly minDecibels: number
@@ -100,12 +101,14 @@ export namespace Sound {
         return { node, timeDomain, frequency, analyser: node }
       }
 
-    export const fromUserMedia = (config: AnalyserConfig) => (ctx: AudioContext) =>
-      pipe(
-        UserMedia.create({ audio: true }),
-        TE.map(stream => ctx.createMediaStreamSource(stream)),
-        TE.map(pipe(ctx, create(config), connectToSource))
-      )
+    export const fromUserMedia =
+      (config: AnalyserConfig) =>
+      (ctx: AudioContext): TE.TaskEither<Error, AnalysedNode<AudioNode>> =>
+        pipe(
+          UserMedia.create({ audio: true }),
+          TE.map(stream => ctx.createMediaStreamSource(stream)),
+          TE.map(pipe(ctx, create(config), connectToSource))
+        )
 
     export const fromUserMediaToOut =
       (config: AnalyserConfig) =>
@@ -128,7 +131,7 @@ export namespace Sound {
 
     export const attachAnimation =
       (animation: R.Reader<AnalysedNode, Rx.Observable<AnalysisData>>) =>
-      (analyzedNode: Rx.Observable<AnalysedNode>) =>
+      (analyzedNode: Rx.Observable<AnalysedNode>): Rx.Observable<AnalysisData> =>
         analyzedNode.pipe(Rx.switchMap(animation))
   }
 }

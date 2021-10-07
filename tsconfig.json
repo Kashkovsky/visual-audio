@@ -1,32 +1,32 @@
 {
-    "compilerOptions": {
-	"baseUrl": "./src",
+  "compilerOptions": {
+    "baseUrl": "./src",
     "paths": {
       "~*": ["./*"]
     },
-      "declaration": true,
-      "declarationMap": true,
-      "pretty": true,
-      "target": "es5",
-      "importHelpers": true,
-      "jsx": "react",
-      "sourceMap": true,
-      "emitDecoratorMetadata": true,
-      "experimentalDecorators": true,
-      "noEmitOnError": true,
-      "noImplicitReturns": true,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
-      "noFallthroughCasesInSwitch": true,
-      "moduleResolution": "node",
-      "allowSyntheticDefaultImports": false,
-      "strict": true,
-      "strictPropertyInitialization": false,
-      "strictFunctionTypes": false,
-      "strictNullChecks": true,
-      "incremental": true,
-      "noImplicitAny": true,
-      "lib": ["es2017.object", "es6", "es2015", "dom", "scripthost"]
-    },
-	"include": ["src/**/*"]
-  }
+    "declaration": true,
+    "declarationMap": true,
+    "pretty": true,
+    "target": "es6",
+    "importHelpers": true,
+    "jsx": "react",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "noEmitOnError": true,
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": false,
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "strictFunctionTypes": false,
+    "strictNullChecks": true,
+    "incremental": true,
+    "noImplicitAny": true,
+    "lib": ["es2017.object", "es6", "es2015", "dom", "scripthost"]
+  },
+  "include": ["src/**/*"]
+}

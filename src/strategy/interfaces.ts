@@ -30,11 +30,13 @@ export namespace AnimationStrategy {
       return strategy.mutation(stage)
     }
 
-  export const chainMutation = (mutation: MutationFactory) => (a: AnimationStrategy) => ({
-    mutation: pipe(
-      a.mutation,
-      R.chain(obs => stage => Rx.mergeStatic(obs, mutation(a.analyser)(stage)))
-    ),
-    analyser: a.analyser
-  })
+  export const chainMutation =
+    (mutation: MutationFactory) =>
+    (a: AnimationStrategy): AnimationStrategy => ({
+      mutation: pipe(
+        a.mutation,
+        R.chain(obs => stage => Rx.mergeStatic(obs, mutation(a.analyser)(stage)))
+      ),
+      analyser: a.analyser
+    })
 }

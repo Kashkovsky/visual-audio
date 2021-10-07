@@ -55,7 +55,11 @@ export {
   scheduled,
   EMPTY,
   NEVER,
-  config
+  config,
+  InteropObservable,
+  OperatorFunction,
+  Observer,
+  MonoTypeOperatorFunction
 } from 'rxjs'
 
 export * from 'rxjs/operators'

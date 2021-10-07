@@ -11,11 +11,11 @@ import { FRAMES } from './frames'
  * @param ms The number of milliseconds for the observable to last
  * @param frames A frame source for milliseconds elapsed since subscription
  */
-export function duration(ms: number, frames = FRAMES) {
+export function duration(ms: number, frames = FRAMES): Rx.Observable<number> {
   return new Rx.Observable<number>(subscriber => {
     // NOTE: FRAMES cannot error or complete.
     return frames.subscribe(elapsed => {
-      let d = elapsed / ms
+      const d = elapsed / ms
       if (d < 1) {
         subscriber.next(d)
       } else {
