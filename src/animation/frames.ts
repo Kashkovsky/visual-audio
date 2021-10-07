@@ -1,56 +1,56 @@
-import Rx from "../rx";
+import Rx from '../rx'
 
 /**
  * An alternating array of Subscribers and their start times.
  */
-let _subscribers: (Rx.Subscriber<number>|number)[] = [];
+let _subscribers: (Rx.Subscriber<number> | number)[] = []
 
-let active = false;
-let id = -1;
+let active = false
+let id = -1
 
 function start() {
-  active = true;
-  id = requestAnimationFrame(tick);
+  active = true
+  id = requestAnimationFrame(tick)
 }
 
 function tick() {
-  const copy = _subscribers.slice();
-  const now = Date.now();
-  for (let i = 0; i < copy.length; i+=2) {
-    const subscriber = copy[i] as Rx.Subscriber<number>;
-    const start = copy[i+1] as number;
-    subscriber.next(now - start);
+  const copy = _subscribers.slice()
+  const now = Date.now()
+  for (let i = 0; i < copy.length; i += 2) {
+    const subscriber = copy[i] as Rx.Subscriber<number>
+    const start = copy[i + 1] as number
+    subscriber.next(now - start)
   }
   if (_subscribers.length) {
-    id = requestAnimationFrame(tick);
+    id = requestAnimationFrame(tick)
   }
 }
 
 function removeSubscriber(index: number) {
-  _subscribers.splice(index, 2);
+  _subscribers.splice(index, 2)
   if (_subscribers.length === 0) {
-    active = false;
-    cancelAnimationFrame(id);
+    active = false
+    cancelAnimationFrame(id)
   }
 }
 
 /**
  * A shared observable of animation frames.
- * 
+ *
  * Since animation frames are global in nature, all subscriptions to this
- * observable are inherently shared. Emits a `number` that is the number of 
+ * observable are inherently shared. Emits a `number` that is the number of
  * milliseconds since subscription started on each tick. This observable
  * does not end.
  */
 export const FRAMES = new Rx.Observable<number>(subscriber => {
-  _subscribers.push(subscriber, Date.now());
+  _subscribers.push(subscriber, Date.now())
   if (!active) {
-    start();
+    start()
   }
   return () => {
-    const index = _subscribers.indexOf(subscriber);
+    const index = _subscribers.indexOf(subscriber)
     if (index) {
-      removeSubscriber(index);
+      removeSubscriber(index)
     }
-  };
-});
+  }
+})
