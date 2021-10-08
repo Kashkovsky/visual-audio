@@ -1,16 +1,24 @@
-import { Reader } from 'fp-ts/es6/Reader'
 import Konva from 'konva'
-import { easeInBack, RxAnimation } from '../animation'
+import { ShapeKind, ShapeParams } from '../utils'
+import { RxAnimation } from '../animation'
 import { AnalysisData } from '../audio'
 import Rx from '../rx'
 import { AnimationStrategy } from './interfaces'
+import { Endomorphism } from 'fp-ts/es6/Endomorphism'
 
-export interface PulseStrategyConfig extends Konva.ShapeConfig {
-  readonly stroke?: string
-  readonly radiusFactor?: number
+export interface PulseStrategyConfig<K extends ShapeKind> extends ShapeParams<K> {
+  /** Animation will not be triggered for signal lower than value */
+  readonly tolerance?: number
+  /** Ho intensively should size react to signal */
+  readonly sizeFactor?: number
+  /** Should the pulse be centered */
+  readonly center?: boolean
+  /**  An optional easing function */
+  readonly easing?: Endomorphism<number>
 }
-export const pulseStrategy: Reader<PulseStrategyConfig, AnimationStrategy.MutationFactory> =
-  ({ stroke = 'black', radiusFactor = 1 }) =>
+
+export const pulseStrategy =
+  <K extends ShapeKind>(params: PulseStrategyConfig<K>): AnimationStrategy.MutationFactory =>
   audio =>
   stage => {
     const layer = new Konva.Layer()
@@ -19,21 +27,25 @@ export const pulseStrategy: Reader<PulseStrategyConfig, AnimationStrategy.Mutati
       // Pick low bass only
       Rx.map(AnalysisData.Frequency.pick(AnalysisData.Frequency.Fraction.subBass)),
       // Filter out quiet signal
-      Rx.filter(AnalysisData.isGreaterThan(100)),
+      Rx.filter(AnalysisData.isGreaterThan(params.tolerance || 150)),
       // Create fading out tail
-      RxAnimation.reverb({ duration: 1000, easing: easeInBack }),
-      // Draw circle
+      RxAnimation.reverb({ duration: 500, easing: params.easing }),
+      // Draw shape
       Rx.tap(data => {
         layer.destroyChildren()
-        const size = AnalysisData.mean(data)
-
-        const circle = new Konva.Circle({
-          x: stage.width() / 2,
-          y: stage.height() / 2,
-          radius: size * radiusFactor,
-          stroke
+        const size = AnalysisData.mean(data) * (params.sizeFactor || 1)
+        const shape = ShapeParams.toShape<K>(params)({
+          width: size,
+          height: size,
+          ...(params.center
+            ? {
+                x: stage.width() / 2,
+                y: stage.height() / 2
+              }
+            : null)
         })
-        layer.add(circle)
+
+        layer.add(shape)
       }),
       Rx.mapTo(void 0)
     )
