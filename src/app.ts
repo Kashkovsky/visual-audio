@@ -14,8 +14,8 @@ export const App = (): Rx.Subscription =>
       Sound.AnalysedNode.attachAnimation(
         flow(
           AnimationStrategy.create(spectrumStrategy({})),
-          AnimationStrategy.chainMutation(sineStrategy({ stroke: 'white' })),
-          AnimationStrategy.chainMutation(
+          AnimationStrategy.chainAnimation(sineStrategy({ stroke: 'white' })),
+          AnimationStrategy.chainAnimation(
             pulseStrategy({
               kind: ShapeKind.circle,
               config: {
@@ -26,7 +26,7 @@ export const App = (): Rx.Subscription =>
               }
             })
           ),
-          AnimationStrategy.chainMutation(
+          AnimationStrategy.chainAnimation(
             pulseStrategy({
               kind: ShapeKind.star,
               config: {

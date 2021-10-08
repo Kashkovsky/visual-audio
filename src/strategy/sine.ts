@@ -1,17 +1,19 @@
+import { pipe } from 'fp-ts/es6/function'
 import { Reader } from 'fp-ts/es6/Reader'
 import Konva from 'konva'
-import Rx from '../rx'
+import { RxAnimation } from '../animation'
 import { AnimationStrategy } from './interfaces'
 
 type SineStrategyConfig = Konva.LineConfig
 
-export const sineStrategy: Reader<SineStrategyConfig, AnimationStrategy.MutationFactory> =
+export const sineStrategy: Reader<SineStrategyConfig, AnimationStrategy.AnimationFactory> =
   config => audio => stage => {
     const layer = new Konva.Layer()
     stage.add(layer)
 
-    return audio.waveform.pipe(
-      Rx.tap(data => {
+    return pipe(
+      audio.waveform,
+      RxAnimation.draw(data => {
         layer.destroyChildren()
         const bufferLength = audio.analyser.fftSize
         const width = stage.width()
@@ -34,7 +36,6 @@ export const sineStrategy: Reader<SineStrategyConfig, AnimationStrategy.Mutation
         })
 
         layer.add(line)
-      }),
-      Rx.mapTo(void 0)
+      })
     )
   }

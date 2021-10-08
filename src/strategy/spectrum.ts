@@ -1,19 +1,21 @@
+import { pipe } from 'fp-ts/es6/function'
 import { Reader } from 'fp-ts/es6/Reader'
 import Konva from 'konva'
-import Rx from '../rx'
+import { RxAnimation } from '../animation'
 import { AnimationStrategy } from './interfaces'
 
 export interface SpectrumStrategyConfig {
   background?: Konva.RectConfig
   bar?: Konva.RectConfig
 }
-export const spectrumStrategy: Reader<SpectrumStrategyConfig, AnimationStrategy.MutationFactory> =
+export const spectrumStrategy: Reader<SpectrumStrategyConfig, AnimationStrategy.AnimationFactory> =
   config => audio => stage => {
     const layer = new Konva.Layer()
     stage.add(layer)
 
-    return audio.frequency.pipe(
-      Rx.tap(d => {
+    return pipe(
+      audio.frequency,
+      RxAnimation.draw(d => {
         layer.destroyChildren()
         const bufferLength = audio.analyser.frequencyBinCount
         const width = (config.background && config.background.width) || stage.width()
@@ -47,7 +49,6 @@ export const spectrumStrategy: Reader<SpectrumStrategyConfig, AnimationStrategy.
           layer.add(bar)
           x += barWidth + 1
         }
-      }),
-      Rx.mapTo(void 0)
+      })
     )
   }

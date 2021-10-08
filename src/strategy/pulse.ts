@@ -5,6 +5,7 @@ import { AnalysisData } from '../audio'
 import Rx from '../rx'
 import { AnimationStrategy } from './interfaces'
 import { Endomorphism } from 'fp-ts/es6/Endomorphism'
+import { pipe } from 'fp-ts/es6/function'
 
 export interface PulseStrategyConfig<K extends ShapeKind> extends ShapeParams<K> {
   /** Animation will not be triggered for signal lower than value */
@@ -18,12 +19,13 @@ export interface PulseStrategyConfig<K extends ShapeKind> extends ShapeParams<K>
 }
 
 export const pulseStrategy =
-  <K extends ShapeKind>(params: PulseStrategyConfig<K>): AnimationStrategy.MutationFactory =>
+  <K extends ShapeKind>(params: PulseStrategyConfig<K>): AnimationStrategy.AnimationFactory =>
   audio =>
   stage => {
     const layer = new Konva.Layer()
     stage.add(layer)
-    return audio.frequency.pipe(
+    return pipe(
+      audio.frequency,
       // Pick low bass only
       Rx.map(AnalysisData.Frequency.pick(AnalysisData.Frequency.Fraction.subBass)),
       // Filter out quiet signal
@@ -31,7 +33,7 @@ export const pulseStrategy =
       // Create fading out tail
       RxAnimation.reverb({ duration: 500, easing: params.easing }),
       // Draw shape
-      Rx.tap(data => {
+      RxAnimation.draw(data => {
         layer.destroyChildren()
         const size = AnalysisData.mean(data) * (params.sizeFactor || 1)
         const shape = ShapeParams.toShape<K>(params)({
@@ -46,7 +48,6 @@ export const pulseStrategy =
         })
 
         layer.add(shape)
-      }),
-      Rx.mapTo(void 0)
+      })
     )
   }

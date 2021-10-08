@@ -5,17 +5,17 @@ import Rx from '../rx'
 import Konva from 'konva'
 
 export interface AnimationStrategy {
-  readonly mutation: AnimationStrategy.Mutation
+  readonly animation: AnimationStrategy.Animation
   readonly analyser: Sound.AnalysedNode
 }
 
 export namespace AnimationStrategy {
-  export type Mutation = R.Reader<Konva.Stage, Rx.Observable<void>>
-  export type MutationFactory = R.Reader<Sound.AnalysedNode, Mutation>
+  export type Animation = R.Reader<Konva.Stage, Rx.Observable<void>>
+  export type AnimationFactory = R.Reader<Sound.AnalysedNode, Animation>
   export const create =
-    (mutation: MutationFactory) =>
+    (animationFactory: AnimationFactory) =>
     (analyser: Sound.AnalysedNode): AnimationStrategy => ({
-      mutation: mutation(analyser),
+      animation: animationFactory(analyser),
       analyser
     })
 
@@ -27,15 +27,15 @@ export namespace AnimationStrategy {
         width: window.innerWidth,
         height: window.innerHeight
       })
-      return strategy.mutation(stage)
+      return strategy.animation(stage)
     }
 
-  export const chainMutation =
-    (mutation: MutationFactory) =>
+  export const chainAnimation =
+    (animationFactory: AnimationFactory) =>
     (a: AnimationStrategy): AnimationStrategy => ({
-      mutation: pipe(
-        a.mutation,
-        R.chain(obs => stage => Rx.mergeStatic(obs, mutation(a.analyser)(stage)))
+      animation: pipe(
+        a.animation,
+        R.chain(obs => stage => Rx.mergeStatic(obs, animationFactory(a.analyser)(stage)))
       ),
       analyser: a.analyser
     })
