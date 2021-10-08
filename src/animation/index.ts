@@ -6,3 +6,4 @@ export * from './tween'
 export * from './velocity'
 
 export * from './motion'
+export * as RxAnimation from './behavior'
