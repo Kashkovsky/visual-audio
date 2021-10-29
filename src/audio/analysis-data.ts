@@ -59,7 +59,8 @@ export namespace AnalysisData {
   }
 
   /** @return Mean value */
-  export const mean: Reader<AnalysisData, number> = data => Mean(...data) as number
+  export const mean: Reader<AnalysisData | NonEmptyArray<number>, number> = data =>
+    Mean(...data) as number
 
   /** Modifies data values with given @param f function  */
   export const map =

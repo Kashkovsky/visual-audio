@@ -19,7 +19,9 @@ export interface PulseStrategyConfig<K extends ShapeKind> extends ShapeParams<K>
 }
 
 export const pulseStrategy =
-  <K extends ShapeKind>(params: PulseStrategyConfig<K>): AnimationStrategy.AnimationFactory =>
+  <K extends ShapeKind>(
+    params: PulseStrategyConfig<K>
+  ): AnimationStrategy.AnimationFactory<AnimationStrategy.Animation2D> =>
   audio =>
   stage => {
     const layer = new Konva.Layer()

@@ -1,3 +1,4 @@
-import { App } from './app'
+import { App3D } from './app'
 
-App()
+// App2D()
+App3D()
