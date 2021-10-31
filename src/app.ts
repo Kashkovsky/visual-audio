@@ -5,11 +5,12 @@ import {
   sineStrategy,
   spectrumStrategy,
   pulseStrategy,
-  discoballStrategy
+  particleDissolveStrategy
 } from './strategy'
 import Rx from './rx'
 import { ShapeKind } from './utils'
 import { easeOutElastic } from './animation'
+import * as portrait from '../assets/portrait.png'
 
 const analyserConfig = { minDecibels: -90, maxDecibels: -10, fftSize: 256 }
 
@@ -59,7 +60,11 @@ export const App3D = (): Rx.Subscription =>
       Sound.AnalysedNode.fromUserMediaToOut(analyserConfig),
       Sound.AnalysedNode.attachAnimation(
         flow(
-          AnimationStrategy.create(discoballStrategy()),
+          AnimationStrategy.create(
+            particleDissolveStrategy({
+              imageUrl: portrait
+            })
+          ),
           AnimationStrategy.Animation3D.render({
             cameraOptions: {
               fov: 70,

@@ -20,9 +20,11 @@
     "konva": "^8.2.2",
     "mathjs": "^9.5.0",
     "rxjs": "^7.3.0",
-    "three": "^0.134.0"
+    "three": "^0.134.0",
+    "three-orbit-controls": "^82.1.0"
   },
   "devDependencies": {
+    "@parcel/transformer-glsl": "^2.0.0-rc.0",
     "@parcel/transformer-image": "^2.0.0-rc.0",
     "@types/dat.gui": "^0.7.7",
     "@types/node": "^16.7.1",

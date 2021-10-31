@@ -55,6 +55,7 @@ export namespace AnimationStrategy {
       readonly scene: THREE.Scene
       readonly camera: THREE.PerspectiveCamera
       readonly render: IO<void>
+      readonly canvas: HTMLCanvasElement
     }
 
     export interface RenderOptions {
@@ -103,6 +104,7 @@ export namespace AnimationStrategy {
           strategy.animation({
             scene,
             camera,
+            canvas: renderer.domElement,
             render: () => renderer.render(scene, camera)
           })
         )
