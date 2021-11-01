@@ -19,12 +19,12 @@ import bgUrl from 'url:./nebula-bg.png'
 export const discoballStrategy =
   (): AnimationStrategy.AnimationFactory<AnimationStrategy.Animation3D> =>
   audio =>
-  ({ scene, render }) => {
+  ({ scene }) => {
     const textureLoader = new THREE.TextureLoader()
     const texture = textureLoader.load(mapUrl)
     const bg = textureLoader.load(bgUrl)
     scene.background = bg
-    const geometry = new THREE.SphereBufferGeometry(0.5, 32, 32)
+    const geometry = new THREE.SphereBufferGeometry(100, 32, 32)
     const material = new THREE.MeshStandardMaterial({
       metalness: 0.5,
       roughness: 0.1,
@@ -34,11 +34,11 @@ export const discoballStrategy =
     })
     const mesh = new THREE.Mesh(geometry, material)
 
-    const light = new THREE.PointLight(0xffffff, 0.5)
-    light.position.set(2, 3, 4)
+    const light = new THREE.PointLight(0xffffff, 10)
+    light.position.set(2, 3, 1000)
 
     const light2 = new THREE.PointLight(0xff0000, 2)
-    light2.position.set(-3, 3, 1)
+    light2.position.set(-3, 3, 100)
 
     const light3 = new THREE.PointLight(0x0000ff, 2)
     light3.position.set(2.9, -3, 0)
@@ -55,7 +55,6 @@ export const discoballStrategy =
         mesh.rotation.x += 0.01
         mesh.rotation.y += (0.01 * vel) / 2
         light2.intensity = light3.intensity = vel * 100
-        render()
       })
     )
   }

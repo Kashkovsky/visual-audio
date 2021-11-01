@@ -19,7 +19,7 @@ export interface ParticleDissolveStrategyConfig {
 export namespace ParticleDissolveStrategyConfig {
   export const defaultConfig: Partial<ParticleDissolveStrategyConfig> = {
     imageSize: 512,
-    particleSize: 3000,
+    particleSize: 4000,
     initialDistortion: 100,
     tolerance: 10
   }
@@ -37,7 +37,7 @@ export const particleDissolveStrategy = flow(
   ParticleDissolveStrategyConfig.withDefault,
   (config): AnimationStrategy.AnimationFactory<AnimationStrategy.Animation3D> =>
     audio =>
-    ({ scene, camera, render }) => {
+    ({ scene, camera }) => {
       camera.fov = 70
       camera.position.z = 1000
       camera.near = 0.1
@@ -100,7 +100,6 @@ export const particleDissolveStrategy = flow(
         RxAnimation.draw(vel => {
           material.uniforms.time.value += 1
           material.uniforms.move.value = vel / config.tolerance
-          render()
         })
       )
     }

@@ -65,6 +65,7 @@ export const App3D = (): Rx.Subscription =>
               imageUrl: portrait
             })
           ),
+          // AnimationStrategy.Animation3D.chain(discoballStrategy()),
           AnimationStrategy.Animation3D.render({
             cameraOptions: {
               fov: 70,

@@ -4,7 +4,6 @@ import { pipe } from 'fp-ts/es6/function'
 import Rx from '../rx'
 import Konva from 'konva'
 import * as THREE from 'three'
-import { IO } from 'fp-ts/es6/IO'
 
 export interface AnimationStrategy<Animation extends AnimationStrategy.Animation> {
   readonly animation: Animation
@@ -54,7 +53,6 @@ export namespace AnimationStrategy {
     export interface Environment {
       readonly scene: THREE.Scene
       readonly camera: THREE.PerspectiveCamera
-      readonly render: IO<void>
       readonly canvas: HTMLCanvasElement
     }
 
@@ -101,12 +99,13 @@ export namespace AnimationStrategy {
 
         return Rx.mergeStatic(
           resizeObserver,
-          strategy.animation({
-            scene,
-            camera,
-            canvas: renderer.domElement,
-            render: () => renderer.render(scene, camera)
-          })
+          strategy
+            .animation({
+              scene,
+              camera,
+              canvas: renderer.domElement
+            })
+            .pipe(Rx.tap(() => renderer.render(scene, camera)))
         )
       }
 
