@@ -111,7 +111,12 @@ export namespace Sound {
       (config: AnalyserConfig) =>
       (ctx: AudioContext): TE.TaskEither<Error, AnalysedNode<AudioNode>> =>
         pipe(
-          UserMedia.create({ audio: true }),
+          UserMedia.create({
+            audio: {
+              latency: 0,
+              echoCancellation: false
+            }
+          }),
           TE.map(stream => ctx.createMediaStreamSource(stream)),
           TE.map(pipe(ctx, AnalysedNode.create(config), AnalysedNode.connectToSource))
         )

@@ -3,7 +3,7 @@ import { flow, pipe } from 'fp-ts/es6/function'
 import { NonEmptyArray } from 'fp-ts/es6/NonEmptyArray'
 import { Reader } from 'fp-ts/es6/Reader'
 import { Opaque } from '~utils'
-import { mean as Mean } from 'mathjs'
+import { mean as Mean, sum as Sum } from 'mathjs'
 import { Endomorphism } from 'fp-ts/es6/Endomorphism'
 import { Predicate } from 'fp-ts/es6/Predicate'
 
@@ -61,6 +61,10 @@ export namespace AnalysisData {
   /** @return Mean value */
   export const mean: Reader<AnalysisData | NonEmptyArray<number>, number> = data =>
     Mean(...data) as number
+
+  /** @return Sum of values */
+  export const sum: Reader<AnalysisData | NonEmptyArray<number>, number> = data =>
+    Sum(...data) as number
 
   /** Modifies data values with given @param f function  */
   export const map =

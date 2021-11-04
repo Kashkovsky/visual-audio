@@ -53,6 +53,7 @@ export namespace AnimationStrategy {
     export interface Environment {
       readonly scene: THREE.Scene
       readonly camera: THREE.PerspectiveCamera
+      readonly renderer: THREE.Renderer
       readonly canvas: HTMLCanvasElement
     }
 
@@ -103,6 +104,7 @@ export namespace AnimationStrategy {
             .animation({
               scene,
               camera,
+              renderer,
               canvas: renderer.domElement
             })
             .pipe(Rx.tap(() => renderer.render(scene, camera)))

@@ -1,16 +1,19 @@
 import { Sound } from './audio'
+import * as THREE from 'three'
 import { flow } from 'fp-ts/es6/function'
 import {
   AnimationStrategy,
   sineStrategy,
   spectrumStrategy,
   pulseStrategy,
-  particleDissolveStrategy
+  //   particleDissolveStrategy,
+  genericStrategy
 } from './strategy'
 import Rx from './rx'
 import { ShapeKind } from './utils'
 import { easeOutElastic } from './animation'
-import * as portrait from '../assets/portrait.png'
+// import * as portrait from '../assets/portrait.png'
+import { Amorph } from './elements'
 
 const analyserConfig = { minDecibels: -90, maxDecibels: -10, fftSize: 256 }
 
@@ -61,11 +64,16 @@ export const App3D = (): Rx.Subscription =>
       Sound.AnalysedNode.attachAnimation(
         flow(
           AnimationStrategy.create(
-            particleDissolveStrategy({
-              imageUrl: portrait
+            genericStrategy({
+              element: Amorph.create({}),
+              background: new THREE.Color('#0c0c0c')
             })
           ),
-          // AnimationStrategy.Animation3D.chain(discoballStrategy()),
+          //   AnimationStrategy.Animation3D.chain(
+          //     particleDissolveStrategy({
+          //       imageUrl: portrait
+          //     })
+          //   ),
           AnimationStrategy.Animation3D.render({
             cameraOptions: {
               fov: 70,
@@ -73,8 +81,7 @@ export const App3D = (): Rx.Subscription =>
               far: 1000
             },
             rendererOptions: {
-              antialias: true,
-              alpha: true
+              antialias: true
             }
           })
         )
