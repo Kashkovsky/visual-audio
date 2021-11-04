@@ -17,6 +17,7 @@
     "@grammarly/focal": "^0.8.5",
     "dat.gui": "^0.7.7",
     "fp-ts": "^2.11.1",
+    "glslify": "^7.1.1",
     "konva": "^8.2.2",
     "mathjs": "^9.5.0",
     "rxjs": "^7.3.0",
