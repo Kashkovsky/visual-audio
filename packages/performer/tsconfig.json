@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig-base.json",
+  "compilerOptions": {
+    "paths": {
+      "@visual-audio/engine": ["@visual-audio/engine/dist"]
+    },
+    "baseUrl": "./src",
+    "rootDir": "./src",
+    "outDir": "build"
+  },
+  "include": ["src/**/*"],
+  "references": [{ "path": "../engine" }]
+}

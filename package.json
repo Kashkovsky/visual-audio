@@ -1,5 +1,5 @@
 {
-  "name": "root",
+  "name": "visual-audio",
   "private": true,
   "workspaces": {
     "packages": [
@@ -7,21 +7,31 @@
     ]
   },
   "scripts": {
+    "build:engine": "tsc -b ./packages/engine",
     "postinstall": "lerna bootstrap",
-    "dev": "npm i && lerna exec --scope @visual-audio/engine -- npm run dev",
+    "dev": "npm i && lerna exec --scope @visual-audio/performer -- npm run dev",
     "prettier:lint-staged": "prettier --write",
     "eslint:lint-staged": "eslint --max-warnings 0 --fix",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "clean:modules": "rimraf node_modules && rimraf ./packages/**/node_modules",
+    "clean:build": "rimraf ./packages/**/.parcel-cache && rimraf ./packages/**/dist && rimraf ./packages/**/tsconfig.tsbuildinfo",
+    "reset": "npm run clean:build && npm run clean:modules && npm i"
   },
   "devDependencies": {
-    "lerna": "^4.0.0",
-    "husky": "^7.0.2",
-    "prettier": "^2.4.1",
-    "typescript": "^4.4.3",
+    "@parcel/transformer-glsl": "^2.0.0-rc.0",
+    "@parcel/transformer-image": "^2.0.0-rc.0",
+    "@parcel/transformer-typescript-types": "^2.0.0",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "eslint": "^7.32.0",
-    "lint-staged": "^11.2.0"
+    "husky": "^7.0.2",
+    "lerna": "^4.0.0",
+    "lint-staged": "^11.2.0",
+    "parcel": "^2.0.0-rc.0",
+    "parcel-plugin-static-files-copy": "^2.6.0",
+    "prettier": "^2.4.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.4.3"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

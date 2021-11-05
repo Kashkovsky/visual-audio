@@ -1,3 +1,8 @@
-import { App3D } from './app'
-
-App3D()
+export * from './animation'
+export * from './audio'
+export * from './elements'
+export * from './geometry'
+export * from './postProcessing'
+export * from './rx'
+export * from './strategy'
+export * from './utils'

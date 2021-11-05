@@ -7,7 +7,7 @@ import { FRAMES } from '../animation'
 import * as E from 'fp-ts/es6/Either'
 import { AnalysisData } from './analysis-data'
 import * as O from 'fp-ts/es6/Option'
-import { AnimationStrategy } from '~strategy'
+import { AnimationStrategy } from '../strategy'
 
 export interface Sound {
   readonly context: Rx.Observable<AudioContext>

@@ -1,5 +1,9 @@
 {
   "extends": "./tsconfig-base.json",
   "files": [],
-  "references": [{ "path": "packages/engine" }]
+  "references": [
+    { "path": "packages/engine" },
+    { "path": "packages/creator" },
+    { "path": "packages/performer" }
+  ]
 }

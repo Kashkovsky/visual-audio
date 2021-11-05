@@ -1,0 +1,24 @@
+{
+  "name": "@visual-audio/creator",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "Denys Kashkovskyi <denys.kashkovskyi@evry.com>",
+  "homepage": "https://github.com/Kashkovsky/visual-audio#readme",
+  "license": "UNLICENSED",
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kashkovsky/visual-audio.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "bugs": {
+    "url": "https://github.com/Kashkovsky/visual-audio/issues"
+  },
+  "dependencies": {
+    "@visual-audio/engine": "1.0.0"
+  }
+}

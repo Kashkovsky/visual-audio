@@ -1,4 +1,4 @@
-import { Sound } from './audio'
+import { Sound, Amorph, ShapeKind } from '@visual-audio/engine'
 import * as THREE from 'three'
 import { flow, pipe } from 'fp-ts/es6/function'
 import {
@@ -8,17 +8,15 @@ import {
   pulseStrategy,
   //   particleDissolveStrategy,
   genericStrategy
-} from './strategy'
-import Rx from './rx'
-import { ShapeKind } from './utils'
-import { easeOutElastic } from './animation'
+} from '../../engine/src/strategy'
+import { easeOutElastic } from '../../engine/src/animation'
+import { Subscription } from 'rxjs'
 // import * as portrait from '../assets/portrait.png'
-import { Amorph } from './elements'
 // import { OutputStream } from './postProcessing'
 
 const analyserConfig = { minDecibels: -90, maxDecibels: -10, fftSize: 256 }
 
-export const App2D = (): Rx.Subscription =>
+export const App2D = (): Subscription =>
   Sound.createFor(
     flow(
       Sound.AnalysedNode.fromUserMediaToOut(analyserConfig),
@@ -64,7 +62,7 @@ export const App2D = (): Rx.Subscription =>
 //   Rx.switchMap(() => Rx.timer(10000).pipe(Rx.mapTo(false), Rx.startWith(true)))
 // )
 
-export const App3D = (): Rx.Subscription =>
+export const App3D = (): Subscription =>
   pipe(
     Sound.createFor(
       flow(
