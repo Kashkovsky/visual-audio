@@ -1,8 +1,11 @@
 {
   "compilerOptions": {
     "composite": true,
+    "baseUrl": "./src",
+    "rootDir": "./src",
+    "outDir": "build",
     "paths": {
-      "~*": ["./packages/*"]
+      "~*": ["./*"]
     },
     "declaration": true,
     "declarationMap": true,
@@ -26,7 +29,7 @@
     "strictNullChecks": true,
     "incremental": true,
     "noImplicitAny": true,
-    "lib": ["es2017.object", "es6", "es2015", "dom", "scripthost"]
+    "lib": ["es2017.object", "es6", "es2016", "dom", "scripthost"]
   },
-  "include": ["packages/**/*"]
+  "include": ["src/**/*"]
 }

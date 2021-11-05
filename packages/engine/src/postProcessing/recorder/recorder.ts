@@ -6,6 +6,7 @@ import * as NEA from 'fp-ts/es6/NonEmptyArray'
 import * as A from 'fp-ts/es6/Array'
 import * as O from 'fp-ts/es6/Option'
 import * as E from 'fp-ts/es6/Either'
+import * as FF from '@ffmpeg/ffmpeg'
 
 export interface Recorder {
   readonly events: Recorder.Events
@@ -67,6 +68,8 @@ export namespace Recorder {
           videoBitsPerSecond: 5000000
         })
         const events = Recorder.Events.create(recorder)
+        const ffmpeg = FF.createFFmpeg({ log: true })
+        void ffmpeg.load()
         return {
           events,
           start: () => recorder.start(3000),

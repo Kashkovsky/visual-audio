@@ -1,0 +1,38 @@
+{
+  "name": "@visual-audio/engine",
+  "version": "1.0.0",
+  "author": "Denys Kashkovskyi",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "parcel index.html",
+    "build": "parcel build index.html"
+  },
+  "dependencies": {
+    "@ffmpeg/core": "^0.10.0",
+    "@ffmpeg/ffmpeg": "^0.10.1",
+    "@grammarly/focal": "^0.8.5",
+    "dat.gui": "^0.7.7",
+    "fp-ts": "^2.11.1",
+    "glslify": "^7.1.1",
+    "konva": "^8.2.2",
+    "mathjs": "^9.5.0",
+    "rxjs": "^7.3.0",
+    "three": "^0.134.0",
+    "three-orbit-controls": "^82.1.0"
+  },
+  "devDependencies": {
+    "@parcel/transformer-glsl": "^2.0.0-rc.0",
+    "@parcel/transformer-image": "^2.0.0-rc.0",
+    "@types/dat.gui": "^0.7.7",
+    "@types/node": "^16.7.1",
+    "@types/three": "^0.133.1",
+    "@types/webpack-env": "^1.16.2",
+    "parcel": "^2.0.0-rc.0",
+    "parcel-plugin-static-files-copy": "^2.6.0",
+    "typescript": "^4.4.3"
+  },
+  "resolutions": {
+    "set-value": "4.0.1"
+  }
+}

@@ -14,7 +14,7 @@ import { ShapeKind } from './utils'
 import { easeOutElastic } from './animation'
 // import * as portrait from '../assets/portrait.png'
 import { Amorph } from './elements'
-import { OutputStream } from './postProcessing'
+// import { OutputStream } from './postProcessing'
 
 const analyserConfig = { minDecibels: -90, maxDecibels: -10, fftSize: 256 }
 
@@ -59,10 +59,10 @@ export const App2D = (): Rx.Subscription =>
   ).subscribe()
 
 // TODO: Introduce some UI for Recorder
-const recordEnabled = Rx.of(false).pipe(
-  Rx.delay(4000),
-  Rx.switchMap(() => Rx.timer(10000).pipe(Rx.mapTo(false), Rx.startWith(true)))
-)
+// const recordEnabled = Rx.of(false).pipe(
+//   Rx.delay(4000),
+//   Rx.switchMap(() => Rx.timer(10000).pipe(Rx.mapTo(false), Rx.startWith(true)))
+// )
 
 export const App3D = (): Rx.Subscription =>
   pipe(
@@ -88,6 +88,6 @@ export const App3D = (): Rx.Subscription =>
           }
         })
       )
-    ),
-    OutputStream.record(recordEnabled)
+    )
+    // OutputStream.record(recordEnabled)
   ).subscribe()
