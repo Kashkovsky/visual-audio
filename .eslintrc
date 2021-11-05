@@ -3,7 +3,7 @@
     {
       "files": ["*.ts", "*.tsx"],
       "parserOptions": {
-        "project": ["./tsconfig.json"]
+        "project": ["./packages/engine/tsconfig.json"]
       }
     }
   ],
