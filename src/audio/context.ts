@@ -6,6 +6,8 @@ import Rx from '../rx'
 import { FRAMES } from '../animation'
 import * as E from 'fp-ts/es6/Either'
 import { AnalysisData } from './analysis-data'
+import * as O from 'fp-ts/es6/Option'
+import { AnimationStrategy } from '~strategy'
 
 export interface Sound {
   readonly context: Rx.Observable<AudioContext>
@@ -53,6 +55,7 @@ export namespace Sound {
 
   export interface AnalysedNode<T extends AudioNode = AudioNode> {
     readonly node: T
+    readonly stream: O.Option<MediaStream>
     readonly analyser: AnalyserNode
     readonly waveform: Rx.Observable<AnalysisData.Waveform>
     readonly frequency: Rx.Observable<AnalysisData.Frequency>
@@ -69,16 +72,17 @@ export namespace Sound {
 
     export const connectToSource =
       (analyser: AnalysedNode<AnalyserNode>) =>
-      (source: AudioNode): AnalysedNode => ({
+      (source: MediaStreamAudioSourceNode): AnalysedNode => ({
         ...analyser,
+        stream: O.some(source.mediaStream),
         node: source.connect(analyser.node)
       })
 
     export const connectToDestination =
-      (dest: AudioNode) =>
-      (analyser: AnalysedNode<AnalyserNode>): AnalysedNode => ({
+      (destination: AudioNode) =>
+      (analyser: AnalysedNode<AudioNode>): AnalysedNode => ({
         ...analyser,
-        node: analyser.node.connect(dest)
+        node: analyser.node.connect(destination)
       })
 
     export const create =
@@ -104,7 +108,7 @@ export namespace Sound {
           )
         )
 
-        return { node, waveform: waveform, frequency, analyser: node }
+        return { node, waveform: waveform, frequency, analyser: node, stream: O.none }
       }
 
     export const fromUserMedia =
@@ -141,8 +145,10 @@ export namespace Sound {
         )
 
     export const attachAnimation =
-      (animation: R.Reader<AnalysedNode, Rx.Observable<void>>) =>
-      (analyzedNode: Rx.Observable<AnalysedNode>): Rx.Observable<void> =>
-        analyzedNode.pipe(Rx.switchMap(animation))
+      (animation: R.Reader<AnalysedNode, AnimationStrategy<AnimationStrategy.Animation>>) =>
+      (
+        analyzedNode: Rx.Observable<AnalysedNode>
+      ): Rx.Observable<AnimationStrategy<AnimationStrategy.Animation>> =>
+        analyzedNode.pipe(Rx.map(animation))
   }
 }

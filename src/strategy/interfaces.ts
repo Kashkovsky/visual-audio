@@ -4,6 +4,7 @@ import { pipe } from 'fp-ts/es6/function'
 import Rx from '../rx'
 import Konva from 'konva'
 import * as THREE from 'three'
+import * as O from 'fp-ts/es6/Option'
 
 export interface AnimationStrategy<Animation extends AnimationStrategy.Animation> {
   readonly animation: Animation
@@ -28,16 +29,29 @@ export namespace AnimationStrategy {
     })
 
   export namespace Animation2D {
-    export const render =
+    export const toStage =
       () =>
-      (strategy: AnimationStrategy<Animation2D>): Rx.Observable<void> => {
-        const stage = new Konva.Stage({
-          container: 'root',
-          width: window.innerWidth,
-          height: window.innerHeight
-        })
-        return strategy.animation(stage)
-      }
+      (strategy: Rx.Observable<AnimationStrategy<Animation2D>>): Rx.Observable<MediaStream> =>
+        strategy.pipe(
+          Rx.switchMap(strategy => {
+            const stage = new Konva.Stage({
+              container: 'root',
+              width: window.innerWidth,
+              height: window.innerHeight
+            })
+
+            const stream = stage.bufferCanvas._canvas.captureStream(60)
+            pipe(
+              strategy.analyser.stream,
+              O.map(audioStream => {
+                audioStream.getAudioTracks().forEach(track => stream.addTrack(track))
+              })
+            )
+
+            return strategy.animation(stage).pipe(Rx.ignoreElements(), Rx.startWith(stream))
+          })
+        )
+
     export const chain =
       (animationFactory: AnimationFactory<Animation2D>) =>
       (a: AnimationStrategy<Animation2D>): AnimationStrategy<Animation2D> => ({
@@ -68,48 +82,62 @@ export namespace AnimationStrategy {
       }
       readonly rendererOptions?: THREE.WebGLRendererParameters
     }
-    export const render =
+    export const toScene =
       ({ cameraOptions: { fov, near, far }, rendererOptions }: RenderOptions) =>
-      (strategy: AnimationStrategy<Animation3D>): Rx.Observable<void> => {
-        const scene = new THREE.Scene()
-        const camera = new THREE.PerspectiveCamera(
-          fov,
-          window.innerWidth / window.innerHeight,
-          near,
-          far
-        )
-        camera.position.z = 1
-        scene.add(camera)
-        const renderer = new THREE.WebGLRenderer({
-          canvas: document.createElement('canvas'),
-          ...rendererOptions
-        })
-        renderer.setSize(window.innerWidth, window.innerHeight)
-        document.body.prepend(renderer.domElement)
-
-        const resizeObserver = Rx.fromEvent(window, 'resize').pipe(
-          Rx.tap(() => {
-            console.log('Resetting 3d Env')
-            camera.aspect = window.innerWidth / window.innerHeight
-            camera.updateProjectionMatrix()
-            renderer.setSize(window.innerWidth, window.innerHeight)
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-          }),
-          Rx.ignoreElements()
-        )
-
-        return Rx.mergeStatic(
-          resizeObserver,
-          strategy
-            .animation({
-              scene,
-              camera,
-              renderer,
-              canvas: renderer.domElement
+      (strategy: Rx.Observable<AnimationStrategy<Animation3D>>): Rx.Observable<MediaStream> =>
+        strategy.pipe(
+          Rx.switchMap(strategy => {
+            const scene = new THREE.Scene()
+            const camera = new THREE.PerspectiveCamera(
+              fov,
+              window.innerWidth / window.innerHeight,
+              near,
+              far
+            )
+            camera.position.z = 1
+            scene.add(camera)
+            const renderer = new THREE.WebGLRenderer({
+              canvas: document.createElement('canvas'),
+              ...rendererOptions
             })
-            .pipe(Rx.tap(() => renderer.render(scene, camera)))
+            renderer.setSize(window.innerWidth, window.innerHeight)
+            document.body.prepend(renderer.domElement)
+
+            const resizeObserver = Rx.fromEvent(window, 'resize').pipe(
+              Rx.tap(() => {
+                camera.aspect = window.innerWidth / window.innerHeight
+                camera.updateProjectionMatrix()
+                renderer.setSize(window.innerWidth, window.innerHeight)
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+              }),
+              Rx.ignoreElements()
+            )
+
+            const stream = renderer.domElement.captureStream(60)
+            pipe(
+              strategy.analyser.stream,
+              O.map(audioStream => {
+                audioStream.getAudioTracks().forEach(track => stream.addTrack(track))
+              })
+            )
+
+            return Rx.mergeStatic(
+              resizeObserver,
+              strategy
+                .animation({
+                  scene,
+                  camera,
+                  renderer,
+                  canvas: renderer.domElement
+                })
+                .pipe(
+                  Rx.tap(() => renderer.render(scene, camera)),
+                  Rx.ignoreElements(),
+                  Rx.startWith(stream)
+                )
+            )
+          })
         )
-      }
 
     export const chain =
       (animationFactory: AnimationFactory<Animation3D>) =>
