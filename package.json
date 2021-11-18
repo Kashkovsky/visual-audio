@@ -12,15 +12,14 @@
     "dev:performer": "lerna exec --parallel --ignore @va/app-creator -- npm run dev",
     "dev:creator": "lerna exec --parallel --ignore @va/app-performer -- npm run dev",
     "build:base": "lerna bootstrap --hoist --ignore @va/app-*",
-    "build:performer": "npm run clean:build && npm run lerna bootstrap && lerna exec --scope @va/app-performer -- npm run build",
-    "build:creator": "npm run clean:build && npm run lerna bootstrap && lerna exec --scope @va/app-creator -- npm run build",
+    "build:performer": "npm run clean:build && npm run postinstall && lerna exec --scope @va/app-performer -- npm run build",
+    "build:creator": "npm run clean:build && npm run postinstall && lerna exec --scope @va/app-creator -- npm run build",
     "clean:build": "lerna exec --parallel -- npm run clean:build && rm -rf .parcel-cache && rm -rf dist",
     "clean:packages": "lerna clean --yes",
     "clean": "npm run clean:build && npm run clean:packages",
     "prettier:lint-staged": "prettier --write",
     "eslint:lint-staged": "eslint --max-warnings 0 --fix",
     "prepare": "husky install",
-    "predeploy": "npm run build:performer",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
