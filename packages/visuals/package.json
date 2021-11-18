@@ -12,8 +12,12 @@
   },
   "typedocMain": "src/index.ts",
   "scripts": {
-    "dev": "parcel watch",
-    "build": "parcel build",
+    "dev": "concurrently \"npm:dev:*\"",
+    "build": "concurrently \"npm:build:*\"",
+    "dev:package": "parcel watch",
+    "dev:types": "tsc --watch",
+    "build:types": "tsc",
+    "build:package": "parcel build",
     "prepare": "npm run build",
     "clean:build": "rm -rf .parcel-cache && rm -rf lib"
   },
@@ -36,6 +40,7 @@
     "@types/three": "^0.133.1",
     "parcel": "latest",
     "parcel-plugin-static-files-copy": "^2.6.0",
+    "concurrently": "^6.4.0",
     "typescript": "^4.4.3"
   }
 }
