@@ -25,7 +25,7 @@ export const reverb = ({
   duration: ms,
   frames = FRAMES,
   easing = Rx.identity
-}: FadeOutConfig): Rx.MonoTypeOperatorFunction<AnalysisData> =>
+}: FadeOutConfig): Endomorphism<Rx.Observable<AnalysisData>> =>
   Rx.switchMap(data =>
     duration(ms, frames).pipe(
       Rx.map(v =>

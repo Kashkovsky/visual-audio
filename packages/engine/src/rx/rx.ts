@@ -1,7 +1,6 @@
 export {
   Observable,
   ConnectableObservable,
-  GroupedObservable,
   observable,
   Subject,
   BehaviorSubject,
@@ -55,11 +54,7 @@ export {
   scheduled,
   EMPTY,
   NEVER,
-  config,
-  InteropObservable,
-  OperatorFunction,
-  Observer,
-  MonoTypeOperatorFunction
+  config
 } from 'rxjs'
 
 export * from 'rxjs/operators'
