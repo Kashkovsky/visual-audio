@@ -14,8 +14,10 @@
     "lib"
   ],
   "scripts": {
-    "dev": "parcel index.html",
-    "build": "tsc"
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "prepare": "npm run build",
+    "clean:build": "rm -rf lib && rm -rf tsconfig.tsbuildinfo"
   },
   "dependencies": {
     "@ffmpeg/core": "^0.10.0",

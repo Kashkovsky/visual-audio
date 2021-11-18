@@ -6,7 +6,9 @@
   "private": true,
   "scripts": {
     "dev": "parcel index.html",
-    "build": "rm -rf ./dist && parcel build index.html"
+    "copy:build": "cp -R ./dist ../../dist",
+    "build": "rm -rf ./dist && parcel build index.html && npm run copy:build",
+    "clean:build": "rm -rf .parcel-cache && rm -rf dist"
   },
   "dependencies": {
     "@ffmpeg/core": "^0.10.0",
@@ -23,13 +25,12 @@
     "@va/engine": "1.0.0"
   },
   "devDependencies": {
-    "@parcel/transformer-glsl": "^2.0.0-rc.0",
-    "@parcel/transformer-image": "^2.0.0-rc.0",
+    "@parcel/transformer-glsl": "latest",
+    "@parcel/transformer-image": "latest",
     "@types/dat.gui": "^0.7.7",
     "@types/node": "^16.7.1",
     "@types/three": "^0.133.1",
-    "@types/webpack-env": "^1.16.2",
-    "parcel": "^2.0.0-rc.0",
+    "parcel": "latest",
     "parcel-plugin-static-files-copy": "^2.6.0",
     "typescript": "^4.4.3"
   },

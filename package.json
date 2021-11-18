@@ -7,13 +7,18 @@
     ]
   },
   "scripts": {
-    "postinstall": "lerna bootstrap",
-    "dev": "npm i && lerna exec --scope @va/engine -- npm run dev",
-    "build": "lerna exec --concurrency 1 -- npm run build",
+    "bootstrap": "lerna bootstrap --hoist",
+    "dev": "npm run build:engine && npm run bootstrap && lerna exec --parallel -- npm run dev",
+    "build:engine": "lerna bootstrap --hoist --ignore @va/performer",
+    "build": "npm run clean:build && npm run build:engine && npm run bootstrap && lerna exec --scope @va/performer -- npm run build",
+    "clean:build": "lerna exec --parallel -- npm run clean:build && rm -rf .parcel-cache && rm -rf dist",
+    "clean:packages": "lerna clean --yes && rm -rf node_modules",
+    "clean": "npm run clean:build && npm run clean:packages",
     "prettier:lint-staged": "prettier --write",
     "eslint:lint-staged": "eslint --max-warnings 0 --fix",
     "prepare": "husky install",
-    "deploy": "gh-pages -d packages/engine/dist"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.33.0",
