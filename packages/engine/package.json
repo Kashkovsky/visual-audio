@@ -2,7 +2,7 @@
   "name": "@va/engine",
   "version": "1.0.0",
   "author": "Denys Kashkovskyi",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "private": true,
   "types": "lib/index.d.ts",
   "module": "lib/index.js",
@@ -22,17 +22,13 @@
   "dependencies": {
     "@ffmpeg/core": "^0.10.0",
     "@ffmpeg/ffmpeg": "^0.10.1",
-    "dat.gui": "^0.7.7",
-    "fp-ts": "^2.11.1",
-    "glslify": "^7.1.1",
     "konva": "^8.2.2",
     "mathjs": "^9.5.0",
+    "fp-ts": "^2.11.1",
     "rxjs": "^7.3.0",
-    "three": "^0.134.0",
-    "three-orbit-controls": "^82.1.0"
+    "three": "^0.134.0"
   },
   "devDependencies": {
-    "@types/dat.gui": "^0.7.7",
     "@types/node": "^16.7.1",
     "@types/three": "^0.133.1",
     "typescript": "^4.4.3"

@@ -1,12 +1,11 @@
 {
-  "name": "@va/app-performer",
+  "name": "@va/app-creator",
   "version": "1.0.0",
   "author": "Denys Kashkovskyi",
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
     "dev": "parcel index.html",
-    "copy:build": "cp -R ./dist ../../dist",
     "build": "rm -rf ./dist && parcel build index.html && npm run copy:build",
     "clean:build": "rm -rf .parcel-cache && rm -rf dist"
   },

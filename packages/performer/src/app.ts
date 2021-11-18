@@ -1,58 +1,9 @@
-import { Sound, ShapeKind, easeOutElastic, Rx, AnimationStrategy } from '@va/engine'
+import { Sound, Rx, AnimationStrategy } from '@va/engine'
+import { genericStrategy, Amorph } from '@va/visuals'
 import * as THREE from 'three'
 import { flow, pipe } from 'fp-ts/es6/function'
-import {
-  sineStrategy,
-  spectrumStrategy,
-  pulseStrategy,
-  //   particleDissolveStrategy,
-  genericStrategy
-} from './strategy'
-// import * as portrait from '../assets/portrait.png'
-import { Amorph } from './elements'
-// import { OutputStream } from './postProcessing'
 
 const analyserConfig = { minDecibels: -90, maxDecibels: -10, fftSize: 256, mute: true }
-
-export const App2D = (): Rx.Subscription =>
-  Sound.createFor(
-    flow(
-      Sound.AnalysedNode.fromUserMediaToOut(analyserConfig),
-      Sound.AnalysedNode.attachAnimation(
-        flow(
-          AnimationStrategy.create(spectrumStrategy({})),
-          AnimationStrategy.Animation2D.chain(sineStrategy({ stroke: 'white' })),
-          AnimationStrategy.Animation2D.chain(
-            pulseStrategy({
-              kind: ShapeKind.circle,
-              config: {
-                stroke: 'white',
-                fill: 'grey',
-                x: 100,
-                y: 100
-              }
-            })
-          ),
-          AnimationStrategy.Animation2D.chain(
-            pulseStrategy({
-              kind: ShapeKind.star,
-              config: {
-                stroke: 'white',
-                fill: 'grey',
-                numPoints: 6,
-                innerRadius: 100,
-                outerRadius: 200
-              },
-              center: true,
-              easing: easeOutElastic,
-              tolerance: 100
-            })
-          )
-        )
-      ),
-      AnimationStrategy.Animation2D.toStage()
-    )
-  ).subscribe()
 
 // TODO: Introduce some UI for Recorder
 // const recordEnabled = Rx.of(false).pipe(

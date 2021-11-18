@@ -3,8 +3,9 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "rootDir": "./src",
-    "outDir": "build"
+    "outDir": "lib",
+    "emitDeclarationOnly": true
   },
   "include": ["src/**/*"],
-  "references": [{ "path": "../engine" }, { "path": "../visuals" }]
+  "references": [{ "path": "../engine" }]
 }

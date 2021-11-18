@@ -7,20 +7,31 @@
     ]
   },
   "scripts": {
-    "bootstrap": "lerna bootstrap --hoist",
-    "dev": "npm run build:engine && npm run bootstrap && lerna exec --parallel -- npm run dev",
-    "build:engine": "lerna bootstrap --hoist --ignore @va/performer",
-    "build": "npm run clean:build && npm run build:engine && npm run bootstrap && lerna exec --scope @va/performer -- npm run build",
+    "postinstall": "lerna bootstrap --hoist",
+    "dev": "npm run dev:performer",
+    "dev:performer": "lerna exec --parallel --ignore @va/app-creator -- npm run dev",
+    "dev:creator": "lerna exec --parallel --ignore @va/app-performer -- npm run dev",
+    "build:base": "lerna bootstrap --hoist --ignore @va/app-*",
+    "build:performer": "npm run clean:build && npm run lerna bootstrap && lerna exec --scope @va/app-performer -- npm run build",
+    "build:creator": "npm run clean:build && npm run lerna bootstrap && lerna exec --scope @va/app-creator -- npm run build",
     "clean:build": "lerna exec --parallel -- npm run clean:build && rm -rf .parcel-cache && rm -rf dist",
-    "clean:packages": "lerna clean --yes && rm -rf node_modules",
+    "clean:packages": "lerna clean --yes",
     "clean": "npm run clean:build && npm run clean:packages",
     "prettier:lint-staged": "prettier --write",
     "eslint:lint-staged": "eslint --max-warnings 0 --fix",
     "prepare": "husky install",
-    "predeploy": "npm run build",
+    "predeploy": "npm run build:performer",
     "deploy": "gh-pages -d dist"
   },
+  "dependencies": {
+    "fp-ts": "^2.11.1",
+    "rxjs": "^7.3.0",
+    "three": "^0.134.0"
+  },
   "devDependencies": {
+    "@parcel/transformer-typescript-types": "^2.0.1",
+    "@types/node": "^16.7.1",
+    "@types/three": "^0.133.1",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "eslint": "^7.32.0",
@@ -28,6 +39,7 @@
     "husky": "^7.0.2",
     "lerna": "^4.0.0",
     "lint-staged": "^11.2.0",
+    "parcel": "latest",
     "prettier": "^2.4.1",
     "typescript": "^4.4.3"
   },
@@ -35,5 +47,8 @@
     "*.{ts,tsx}": [
       "yarn eslint:lint-staged"
     ]
+  },
+  "resolutions": {
+    "set-value": "4.0.1"
   }
 }
