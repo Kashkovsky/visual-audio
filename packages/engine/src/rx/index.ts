@@ -1,3 +1,1 @@
-import * as Rx from './rx'
-
-export default Rx
+export * as Rx from './rx'

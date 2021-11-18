@@ -8,8 +8,8 @@
   },
   "scripts": {
     "postinstall": "lerna bootstrap",
-    "dev": "npm i && lerna exec --scope @visual-audio/engine -- npm run dev",
-    "build": "npm i && lerna exec --scope @visual-audio/engine -- npm run build",
+    "dev": "npm i && lerna exec --scope @va/engine -- npm run dev",
+    "build": "lerna exec --concurrency 1 -- npm run build",
     "prettier:lint-staged": "prettier --write",
     "eslint:lint-staged": "eslint --max-warnings 0 --fix",
     "prepare": "husky install",

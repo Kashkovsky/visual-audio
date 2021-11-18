@@ -1,5 +1,5 @@
 import { FRAMES, velocity } from '../../animation'
-import Rx from '../../rx'
+import { Rx } from '../../rx'
 import { Circle, Rect } from '../../geometry'
 
 interface CircularMotionConfig {

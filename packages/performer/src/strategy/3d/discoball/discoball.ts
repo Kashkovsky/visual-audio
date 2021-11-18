@@ -1,9 +1,7 @@
 import * as THREE from 'three'
-import { easeOutBounce, RxAnimation } from '../../../animation'
-import { AnimationStrategy } from '../../interfaces'
+import { easeOutBounce, RxAnimation, AnalysisData, Rx, AnimationStrategy } from '@va/engine'
 import { pipe } from 'fp-ts/es6/function'
-import { AnalysisData } from '../../../audio'
-import Rx from '../../../rx'
+
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 //@ts-ignore
 import mapUrl from 'url:./discoball-map.png'

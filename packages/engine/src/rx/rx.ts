@@ -54,7 +54,9 @@ export {
   scheduled,
   EMPTY,
   NEVER,
-  config
+  config,
+  MonoTypeOperatorFunction,
+  Observer
 } from 'rxjs'
 
 export * from 'rxjs/operators'

@@ -1,9 +1,9 @@
-import Rx from '../../rx'
 import { AnalysisData } from '../../audio'
 import { duration } from '../duration'
 import { pipe } from 'fp-ts/es6/function'
 import { Endomorphism } from 'fp-ts/es6/Endomorphism'
 import { FRAMES } from '../frames'
+import { Rx } from '../../rx'
 
 export interface FadeOutConfig {
   /**
@@ -25,7 +25,7 @@ export const reverb = ({
   duration: ms,
   frames = FRAMES,
   easing = Rx.identity
-}: FadeOutConfig): Endomorphism<Rx.Observable<AnalysisData>> =>
+}: FadeOutConfig): Rx.MonoTypeOperatorFunction<AnalysisData> =>
   Rx.switchMap(data =>
     duration(ms, frames).pipe(
       Rx.map(v =>

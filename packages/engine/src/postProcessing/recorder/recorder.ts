@@ -1,7 +1,7 @@
 import { pipe } from 'fp-ts/es6/function'
 import { IO } from 'fp-ts/es6/IO'
 import { Event } from 'three'
-import Rx from '../../rx'
+import { Rx } from '../../rx'
 import * as NEA from 'fp-ts/es6/NonEmptyArray'
 import * as A from 'fp-ts/es6/Array'
 import * as O from 'fp-ts/es6/Option'

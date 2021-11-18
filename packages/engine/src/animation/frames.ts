@@ -1,4 +1,4 @@
-import Rx from '../rx'
+import { Rx } from '../rx'
 
 /**
  * An alternating array of Subscribers and their start times.

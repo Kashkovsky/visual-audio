@@ -1,8 +1,7 @@
 import { pipe } from 'fp-ts/es6/function'
 import { Reader } from 'fp-ts/es6/Reader'
 import Konva from 'konva'
-import { RxAnimation } from '../animation'
-import { AnimationStrategy } from './interfaces'
+import { RxAnimation, AnimationStrategy } from '@va/engine'
 
 export interface SpectrumStrategyConfig {
   background?: Konva.RectConfig

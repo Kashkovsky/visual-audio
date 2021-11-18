@@ -1,7 +1,7 @@
 import { Sound } from '../audio'
 import * as R from 'fp-ts/es6/Reader'
 import { pipe } from 'fp-ts/es6/function'
-import Rx from '../rx'
+import { Rx } from '../rx'
 import Konva from 'konva'
 import * as THREE from 'three'
 import * as O from 'fp-ts/es6/Option'

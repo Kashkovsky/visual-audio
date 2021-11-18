@@ -1,17 +1,13 @@
-import { Sound } from './audio'
+import { Sound, ShapeKind, easeOutElastic, Rx, AnimationStrategy } from '@va/engine'
 import * as THREE from 'three'
 import { flow, pipe } from 'fp-ts/es6/function'
 import {
-  AnimationStrategy,
   sineStrategy,
   spectrumStrategy,
   pulseStrategy,
   //   particleDissolveStrategy,
   genericStrategy
 } from './strategy'
-import Rx from './rx'
-import { ShapeKind } from './utils'
-import { easeOutElastic } from './animation'
 // import * as portrait from '../assets/portrait.png'
 import { Amorph } from './elements'
 // import { OutputStream } from './postProcessing'

@@ -1,5 +1,5 @@
 import { Endomorphism } from 'fp-ts/es6/Endomorphism'
-import Rx from '../rx'
+import { Rx } from '../rx'
 import { Recorder } from './recorder'
 import * as E from 'fp-ts/es6/Either'
 

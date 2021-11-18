@@ -1,5 +1,5 @@
 import { Endomorphism } from 'fp-ts/es6/Endomorphism'
-import Rx from '../rx'
+import { Rx } from '../rx'
 import { duration } from './duration'
 import { FRAMES } from './frames'
 

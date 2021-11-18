@@ -1,9 +1,12 @@
 import Konva from 'konva'
-import { ShapeKind, ShapeParams } from '../utils'
-import { RxAnimation } from '../animation'
-import { AnalysisData } from '../audio'
-import Rx from '../rx'
-import { AnimationStrategy } from './interfaces'
+import {
+  RxAnimation,
+  ShapeKind,
+  ShapeParams,
+  Rx,
+  AnalysisData,
+  AnimationStrategy
+} from '@va/engine'
 import { Endomorphism } from 'fp-ts/es6/Endomorphism'
 import { pipe } from 'fp-ts/es6/function'
 

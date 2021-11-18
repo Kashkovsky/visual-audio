@@ -1,8 +1,5 @@
-import { RxAnimation } from '../../../animation'
-import { AnimationStrategy } from '../../interfaces'
+import { RxAnimation, AnalysisData, Rx, AnimationStrategy } from '@va/engine'
 import { pipe } from 'fp-ts/es6/function'
-import { AnalysisData } from '../../../audio'
-import Rx from '../../../rx'
 import { AnimatedElement } from '../../../elements'
 
 export interface GenericStrategyConfig {
