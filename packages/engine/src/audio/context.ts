@@ -1,4 +1,4 @@
-import { Lazy, pipe } from 'fp-ts/es6/function'
+import { identity, Lazy, pipe } from 'fp-ts/es6/function'
 import * as R from 'fp-ts/es6/Reader'
 import * as TE from 'fp-ts/es6/TaskEither'
 import * as RTE from 'fp-ts/es6/ReaderTaskEither'
@@ -7,7 +7,7 @@ import { FRAMES } from '../animation'
 import * as E from 'fp-ts/es6/Either'
 import { AnalysisData } from './analysis-data'
 import * as O from 'fp-ts/es6/Option'
-import { AnimationStrategy } from '~strategy'
+import { AnimationStrategy } from '../strategy'
 
 export interface Sound {
   readonly context: Rx.Observable<AudioContext>
@@ -68,6 +68,7 @@ export namespace Sound {
       readonly maxDecibels: number
       readonly smoothingTimeConstant?: number
       readonly fftSize?: number
+      readonly mute?: boolean
     }
 
     export const connectToSource =
@@ -131,7 +132,7 @@ export namespace Sound {
         pipe(
           ctx,
           AnalysedNode.fromUserMedia(config),
-          TE.map(Sound.AnalysedNode.connectToDestination(ctx.destination)),
+          TE.map(config.mute ? identity : Sound.AnalysedNode.connectToDestination(ctx.destination)),
           t => Rx.from(t()),
           Rx.switchMap(
             E.fold(

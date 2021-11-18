@@ -16,7 +16,7 @@ import { easeOutElastic } from './animation'
 import { Amorph } from './elements'
 // import { OutputStream } from './postProcessing'
 
-const analyserConfig = { minDecibels: -90, maxDecibels: -10, fftSize: 256 }
+const analyserConfig = { minDecibels: -90, maxDecibels: -10, fftSize: 256, mute: true }
 
 export const App2D = (): Rx.Subscription =>
   Sound.createFor(
