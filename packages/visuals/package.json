@@ -10,6 +10,7 @@
   "targets": {
     "types": false
   },
+  "typedocMain": "src/index.ts",
   "scripts": {
     "dev": "parcel watch",
     "build": "parcel build",

@@ -1,6 +1,6 @@
+import { AnimationStrategy } from '@va/engine'
 import { Reader } from 'fp-ts/es6/Reader'
 import * as THREE from 'three'
-import { AnimationStrategy } from '../strategy'
 
 export interface AnimatedElementInstance {
   readonly mesh: THREE.Mesh
