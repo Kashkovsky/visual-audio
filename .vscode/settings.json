@@ -22,6 +22,7 @@
     "**packages/engine/tsconfig.tsbuildinfo": true,
     "**packages/engine/node_modules": true,
     "**packages/visuals/lib": true,
-    "**packages/visuals/node_modules": true
+    "**packages/visuals/node_modules": true,
+    "**dist": true
   }
 }

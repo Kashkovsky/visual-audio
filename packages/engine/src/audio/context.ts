@@ -1,4 +1,4 @@
-import { identity, Lazy, pipe } from 'fp-ts/es6/function'
+import { flow, identity, Lazy, pipe } from 'fp-ts/es6/function'
 import * as R from 'fp-ts/es6/Reader'
 import * as TE from 'fp-ts/es6/TaskEither'
 import * as RTE from 'fp-ts/es6/ReaderTaskEither'
@@ -8,6 +8,7 @@ import * as E from 'fp-ts/es6/Either'
 import { AnalysisData } from './analysis-data'
 import * as O from 'fp-ts/es6/Option'
 import { AnimationStrategy } from '../animation/interfaces'
+import { SourceNode } from './source-node'
 
 export interface Sound {
   readonly context: Rx.Observable<AudioContext>
@@ -44,15 +45,6 @@ export namespace Sound {
   export const createFor = <T>(logic: R.Reader<AudioContext, Rx.Observable<T>>): Rx.Observable<T> =>
     Sound.create().context.pipe(Rx.switchMap(logic))
 
-  export namespace UserMedia {
-    export const create: RTE.ReaderTaskEither<MediaStreamConstraints, Error, MediaStream> =
-      constr =>
-        TE.tryCatch(
-          () => navigator.mediaDevices.getUserMedia(constr),
-          (e: Error) => new Error(e.message)
-        )
-  }
-
   export interface AnalysedNode<T extends AudioNode = AudioNode> {
     readonly node: T
     readonly stream: O.Option<MediaStream>
@@ -73,7 +65,7 @@ export namespace Sound {
 
     export const connectToSource =
       (analyser: AnalysedNode<AnalyserNode>) =>
-      (source: MediaStreamAudioSourceNode): AnalysedNode => ({
+      (source: SourceNode): AnalysedNode => ({
         ...analyser,
         stream: O.some(source.mediaStream),
         node: source.connect(analyser.node)
@@ -112,39 +104,72 @@ export namespace Sound {
         return { node, waveform: waveform, frequency, analyser: node, stream: O.none }
       }
 
+    /** Asynchronously creates AnalysedNode from user media when it becomes available (user granted access) */
     export const fromUserMedia =
-      (config: AnalyserConfig) =>
-      (ctx: AudioContext): TE.TaskEither<Error, AnalysedNode<AudioNode>> =>
+      (
+        config: AnalyserConfig
+      ): RTE.ReaderTaskEither<AudioContext, Error, AnalysedNode<AudioNode>> =>
+      ctx =>
         pipe(
-          UserMedia.create({
+          ctx,
+          SourceNode.fromUserMedia({
             audio: {
               latency: 0,
               echoCancellation: false
             }
           }),
-          TE.map(stream => ctx.createMediaStreamSource(stream)),
           TE.map(pipe(ctx, AnalysedNode.create(config), AnalysedNode.connectToSource))
         )
 
+    /** Asynchronously creates AnalysedNode from media element (audio or video) when it starts playing */
+    export const fromElement =
+      (
+        element: HTMLMediaElement,
+        config: AnalyserConfig
+      ): RTE.ReaderTaskEither<AudioContext, Error, Sound.AnalysedNode> =>
+      ctx =>
+        pipe(
+          ctx,
+          SourceNode.fromElement(element),
+          TE.map(pipe(ctx, AnalysedNode.create(config), AnalysedNode.connectToSource))
+        )
+
+    const connectToOut = (
+      config: AnalyserConfig,
+      ctx: AudioContext
+    ): R.Reader<TE.TaskEither<Error, AnalysedNode<AudioNode>>, Rx.Observable<Sound.AnalysedNode>> =>
+      flow(
+        TE.map(config.mute ? identity : Sound.AnalysedNode.connectToDestination(ctx.destination)),
+        t => Rx.from(t()),
+        Rx.switchMap(
+          E.fold(
+            err => {
+              console.error(err)
+              return Rx.EMPTY
+            },
+            node => Rx.of(node)
+          )
+        )
+      )
+    /**
+     * Creates and observable AnalysedNode from user media (e.g., microphone). It will emit when the user grants access.
+     * Connects the node to AudioContext destination unless mute is set to true.
+     */
     export const fromUserMediaToOut =
       (config: AnalyserConfig) =>
       (ctx: AudioContext): Rx.Observable<Sound.AnalysedNode> =>
-        pipe(
-          ctx,
-          AnalysedNode.fromUserMedia(config),
-          TE.map(config.mute ? identity : Sound.AnalysedNode.connectToDestination(ctx.destination)),
-          t => Rx.from(t()),
-          Rx.switchMap(
-            E.fold(
-              err => {
-                console.error(err)
-                return Rx.EMPTY
-              },
-              node => Rx.of(node)
-            )
-          )
-        )
+        pipe(ctx, AnalysedNode.fromUserMedia(config), connectToOut(config, ctx))
 
+    /**
+     * Creates and observable AnalysedNode from media element (audio or video). It will emit when the element starts playing.
+     * Connects the node to AudioContext destination unless mute is set to true.
+     */
+    export const fromElementToOut =
+      (element: HTMLMediaElement, config: AnalyserConfig) =>
+      (ctx: AudioContext): Rx.Observable<Sound.AnalysedNode> =>
+        pipe(ctx, AnalysedNode.fromElement(element, config), connectToOut(config, ctx))
+
+    /** Attaches animation strategy to AnalysedNode */
     export const attachAnimation =
       (animation: R.Reader<AnalysedNode, AnimationStrategy<AnimationStrategy.Animation>>) =>
       (
