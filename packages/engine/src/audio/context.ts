@@ -43,7 +43,7 @@ export namespace Sound {
   }
 
   export const createFor = <T>(logic: R.Reader<AudioContext, Rx.Observable<T>>): Rx.Observable<T> =>
-    Sound.create().context.pipe(Rx.switchMap(logic))
+    Sound.create().context.pipe(Rx.switchMap(logic), Rx.share())
 
   export interface AnalysedNode<T extends AudioNode = AudioNode> {
     readonly node: T

@@ -3,19 +3,15 @@ import { genericStrategy, Amorph } from '@va/visuals'
 import * as THREE from 'three'
 import { flow, pipe } from 'fp-ts/es6/function'
 
-const analyserConfig = { minDecibels: -90, maxDecibels: -10, fftSize: 256, mute: true }
-
-// TODO: Introduce some UI for Recorder
-// const recordEnabled = Rx.of(false).pipe(
-//   Rx.delay(4000),
-//   Rx.switchMap(() => Rx.timer(10000).pipe(Rx.mapTo(false), Rx.startWith(true)))
-// )
-
-export const App3D = (): Rx.Subscription =>
+export const App3D = (): Rx.Observable<MediaStream> =>
   pipe(
     Sound.createFor(
       flow(
-        Sound.AnalysedNode.fromUserMediaToOut(analyserConfig),
+        Sound.AnalysedNode.fromUserMediaToOut({
+          minDecibels: -90,
+          maxDecibels: -10,
+          fftSize: 256
+        }),
         Sound.AnalysedNode.attachAnimation(
           AnimationStrategy.create(
             genericStrategy({
@@ -36,5 +32,4 @@ export const App3D = (): Rx.Subscription =>
         })
       )
     )
-    // OutputStream.record(recordEnabled)
-  ).subscribe()
+  )

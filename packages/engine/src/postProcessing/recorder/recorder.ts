@@ -73,16 +73,13 @@ export namespace Recorder {
           start: () => recorder.start(3000),
           stop: () => recorder.stop(),
           record: state => {
-            console.log('Record idle, waiting to start')
             const recordStream = events.started.pipe(
-              Rx.tap(() => console.log('Recorder started')),
               Rx.switchMap(() =>
                 events.dataAvailable.pipe(
                   Rx.map(e => e.data),
                   Rx.filter(data => data.size > 0),
                   Rx.bufferWhen(() => events.stopped),
-                  Rx.take(1),
-                  Rx.tap(() => console.log('Recorder finished'))
+                  Rx.take(1)
                 )
               ),
               Rx.tap(chunks => {
@@ -101,7 +98,11 @@ export namespace Recorder {
               })
             )
             const stateSwitch = state.pipe(
-              Rx.tap(enabled => (enabled ? recorder.start(3000) : recorder.stop())),
+              Rx.tap(enabled =>
+                enabled && recorder.state !== 'recording'
+                  ? recorder.start(3000)
+                  : recorder.state !== 'inactive' && recorder.stop()
+              ),
               Rx.ignoreElements()
             )
             return Rx.mergeStatic(recordStream, stateSwitch)

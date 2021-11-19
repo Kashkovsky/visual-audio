@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": "./src",
     "rootDir": "./src",
-    "outDir": "build"
+    "outDir": "build",
+    "jsx": "react"
   },
   "include": ["src/**/*"],
   "references": [{ "path": "../engine" }, { "path": "../visuals" }, { "path": "../components" }]
