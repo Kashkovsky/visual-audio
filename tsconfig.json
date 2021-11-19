@@ -5,6 +5,7 @@
     { "path": "packages/engine" },
     { "path": "packages/visuals" },
     { "path": "packages/performer" },
-    { "path": "packages/creator" }
+    { "path": "packages/creator" },
+    { "path": "packages/components" }
   ]
 }

@@ -1,0 +1,40 @@
+{
+  "name": "@va/components",
+  "version": "1.0.0",
+  "author": "Denys Kashkovskyi",
+  "license": "UNLICENSED",
+  "private": true,
+  "types": "lib/index.d.ts",
+  "module": "lib/index.js",
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "lib"
+  ],
+  "typedocMain": "src/index.ts",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc",
+    "prepare": "npm run build",
+    "clean:build": "rm -rf lib && rm -rf tsconfig.tsbuildinfo"
+  },
+  "dependencies": {
+    "@va/engine": "1.0.0",
+    "fp-ts": "^2.11.1",
+    "three": "^0.134.0",
+    "typestyle": "^2.2.0",
+    "react": "^17.0.2",
+    "@grammarly/focal": "^0.8.5"
+  },
+  "devDependencies": {
+    "@types/node": "^16.7.1",
+    "@types/three": "^0.133.1",
+    "@types/react": "^17.0.35",
+    "typescript": "^4.4.3"
+  },
+  "resolutions": {
+    "set-value": "4.0.1"
+  }
+}

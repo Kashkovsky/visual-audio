@@ -28,12 +28,17 @@
   "dependencies": {
     "fp-ts": "^2.11.1",
     "rxjs": "^7.3.0",
-    "three": "^0.134.0"
+    "three": "^0.134.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "@grammarly/focal": "^0.8.5"
   },
   "devDependencies": {
     "@parcel/transformer-typescript-types": "^2.0.1",
     "@types/node": "^16.7.1",
     "@types/three": "^0.133.1",
+    "@types/react": "^17.0.35",
+    "@types/react-dom": "^17.0.11",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "eslint": "^7.32.0",

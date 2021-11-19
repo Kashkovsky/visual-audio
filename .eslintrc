@@ -7,7 +7,8 @@
           "./packages/engine/tsconfig.json",
           "./packages/visuals/tsconfig.json",
           "./packages/performer/tsconfig.json",
-          "./packages/creator/tsconfig.json"
+          "./packages/creator/tsconfig.json",
+          "./packages/components/tsconfig.json"
         ]
       }
     }

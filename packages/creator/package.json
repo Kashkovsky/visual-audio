@@ -12,9 +12,15 @@
   "dependencies": {
     "fp-ts": "^2.11.1",
     "@va/engine": "1.0.0",
-    "@va/visuals": "1.0.0"
+    "@va/visuals": "1.0.0",
+    "@va/components": "1.0.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "@grammarly/focal": "^0.8.5"
   },
   "devDependencies": {
+    "@types/react": "^17.0.35",
+    "@types/react-dom": "^17.0.11",
     "parcel": "latest",
     "typescript": "^4.4.3"
   },
