@@ -1,5 +1,5 @@
 import { Sound, Rx, AnimationStrategy } from '@va/engine'
-import { Amorph, frequencyPlaneStrategy, genericStrategy } from '@va/visuals'
+import { Amorph, FrequencyPlaneConfig, frequencyPlaneStrategy, genericStrategy } from '@va/visuals'
 import { flow, pipe } from 'fp-ts/es6/function'
 
 export const App3D = (): Rx.Observable<MediaStream> =>
@@ -23,7 +23,12 @@ export const App3D = (): Rx.Observable<MediaStream> =>
                 source: 'frequency'
               })
             ),
-            AnimationStrategy.Animation3D.chain(frequencyPlaneStrategy())
+            AnimationStrategy.Animation3D.chain(
+              frequencyPlaneStrategy({
+                noiseStrength: 0.5,
+                noiseType: FrequencyPlaneConfig.NoiseType.E
+              })
+            )
           )
         ),
         AnimationStrategy.Animation3D.toScene({

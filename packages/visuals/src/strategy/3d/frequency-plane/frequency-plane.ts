@@ -4,8 +4,33 @@ import * as THREE from 'three'
 import * as fragment from './shaders/fragment.glsl'
 import * as vertex from './shaders/vertex.glsl'
 
+export interface FrequencyPlaneConfig {
+  /**
+   * Amount of noise applied from 0 to 1
+   * @default 0
+   */
+  readonly noiseStrength?: number
+  readonly noiseType?: FrequencyPlaneConfig.NoiseType
+}
+
+export namespace FrequencyPlaneConfig {
+  export enum NoiseType {
+    A,
+    B,
+    C,
+    D,
+    E,
+    G
+  }
+}
+
 export const frequencyPlaneStrategy =
-  (): AnimationStrategy.AnimationFactory<AnimationStrategy.Animation3D> => audio => env => {
+  ({
+    noiseStrength = 0,
+    noiseType = FrequencyPlaneConfig.NoiseType.A
+  }: FrequencyPlaneConfig): AnimationStrategy.AnimationFactory<AnimationStrategy.Animation3D> =>
+  audio =>
+  env => {
     const planeGeometry = new THREE.PlaneBufferGeometry(1, 1, 64, 64)
     const imageSize = 512
     const material = new THREE.ShaderMaterial({
@@ -16,7 +41,9 @@ export const frequencyPlaneStrategy =
         particleSize: { value: 6 },
         imageSize: { value: imageSize },
         frequency: { value: new Array(256) },
-        time: { value: 0 }
+        time: { value: 0 },
+        noiseStrength: { value: noiseStrength },
+        noiseType: { value: noiseType }
       },
       transparent: false,
       depthTest: false,

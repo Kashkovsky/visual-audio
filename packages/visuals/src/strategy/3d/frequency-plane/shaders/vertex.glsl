@@ -1,4 +1,7 @@
+uniform float noiseStrength;
+uniform int noiseType;
 uniform float particleSize;
+uniform float time;
 uniform float [256] frequency;
 
 // TODO: create easing functions for glsl
@@ -9,12 +12,32 @@ float ease(float n) {
 
 varying float vMagnitude;
 
+#pragma glslify: perlin3d = require('../../../../utils/shader/perlin3d.glsl')
+
 void main() {
 	vec3 pos = position;
 	int index = int(floor((pos.x + 0.5) * 64.));
 	float height = frequency[index] * 0.003 - abs(pos.y * 0.75);
 	if (height + pos.z > 0.) {
 		pos.z -= ease(height);
+		if (noiseStrength > 0.) {
+			vec2 base;
+			if (noiseType == 0) {
+				base = pos.xy;
+			} else if (noiseType == 1) {
+				base = pos.yx;
+			} else if (noiseType == 2) {
+				base = pos.xz;
+			} else if (noiseType == 3) {
+				base = pos.zx;
+			} else if (noiseType == 4) {
+				base = pos.yz;
+			} else if (noiseType == 5) {
+				base = pos.zy;
+			}
+			float perlinStrength = perlin3d(vec3(base, time * 0.01));
+			pos += perlinStrength * noiseStrength;
+		}
 	}
 	vec4 modelPosition = modelMatrix * vec4(pos, 1.0);
     vec4 viewPosition = viewMatrix * modelPosition;
