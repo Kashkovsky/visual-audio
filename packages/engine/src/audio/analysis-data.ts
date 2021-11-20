@@ -42,7 +42,10 @@ export namespace AnalysisData {
 
     /** Separates frequency @param data to equal n subarrays, where n is @see {Fraction} values count */
     export const toFractions = (data: AnalysisData.Frequency): Frequency.Fractions =>
-      pipe([...data], A.chunksOf(Math.floor(data.length / Object.keys(Frequency.Fraction).length)))
+      pipe(
+        [...data],
+        A.chunksOf(Math.floor(data.length / (Object.keys(Frequency.Fraction).length / 2)))
+      )
 
     /** Picks given @param fractions from AnalysisData.Frequency */
     export const pick = (
