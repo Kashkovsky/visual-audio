@@ -1,6 +1,5 @@
 import { Sound, Rx, AnimationStrategy } from '@va/engine'
-import { genericStrategy, Amorph } from '@va/visuals'
-import * as THREE from 'three'
+import { Amorph, frequencyPlaneStrategy, genericStrategy } from '@va/visuals'
 import { flow, pipe } from 'fp-ts/es6/function'
 
 export const App3D = (): Rx.Observable<MediaStream> =>
@@ -13,11 +12,13 @@ export const App3D = (): Rx.Observable<MediaStream> =>
           fftSize: 256
         }),
         Sound.AnalysedNode.attachAnimation(
-          AnimationStrategy.create(
-            genericStrategy({
-              element: Amorph.create({}),
-              background: new THREE.Color('#0c0c0c')
-            })
+          flow(
+            AnimationStrategy.create(
+              genericStrategy({
+                element: Amorph.create({ distortionFrequency: 2, displasementStrength: 0.001 })
+              })
+            ),
+            AnimationStrategy.Animation3D.chain(frequencyPlaneStrategy())
           )
         ),
         AnimationStrategy.Animation3D.toScene({

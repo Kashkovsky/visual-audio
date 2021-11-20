@@ -22,8 +22,7 @@
     "prepare": "husky install",
     "deploy": "gh-pages -d dist",
     "gen:docs": "typedoc --entryPointStrategy packages .",
-    "docs": "npx http-server docs",
-    "precommit": "gen:docs"
+    "docs": "npx http-server docs"
   },
   "dependencies": {
     "fp-ts": "^2.11.1",

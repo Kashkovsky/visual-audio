@@ -7,9 +7,16 @@ export namespace Amorph {
   export interface Config {
     readonly distortionFrequency?: number
     readonly rotationFactor?: number
+    readonly displasementStrength?: number
+    readonly displasementFrequency?: number
   }
   export const create: AnimatedElement.Factory<Config> =
-    ({ distortionFrequency = 5, rotationFactor = 1 }) =>
+    ({
+      distortionFrequency = 5,
+      rotationFactor = 1,
+      displasementStrength = 0.02,
+      displasementFrequency = 0.5
+    }) =>
     ({ camera, scene }) => {
       const camFactor = camera.position.z * 0.25
       const geometry = new THREE.SphereBufferGeometry(camFactor, 128, 128)
@@ -28,8 +35,8 @@ export namespace Amorph {
 
       const update = (velocity: number) => {
         mesh.material.uniforms.vTime.value += velocity * 0.5
-        mesh.material.uniforms.vDisplacementFrequency.value = velocity * 0.5
-        mesh.material.uniforms.vDisplacementStrength.value = 0.2 + velocity * 0.02
+        mesh.material.uniforms.vDisplacementFrequency.value = velocity * displasementFrequency
+        mesh.material.uniforms.vDisplacementStrength.value = 0.2 + velocity * displasementStrength
         mesh.rotation.x += 0.005 * velocity * rotationFactor
         mesh.rotation.y += 0.005 * velocity * rotationFactor
       }

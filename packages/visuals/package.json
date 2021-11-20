@@ -29,7 +29,7 @@
     "mathjs": "^9.5.0",
     "rxjs": "^7.3.0",
     "three": "^0.134.0",
-    "three-orbit-controls": "^82.1.0",
+    "three-orbitcontrols-ts": "^0.1.2",
     "@va/engine": "1.0.0"
   },
   "devDependencies": {
