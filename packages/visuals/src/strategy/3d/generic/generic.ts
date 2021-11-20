@@ -4,6 +4,7 @@ import { AnimatedElement } from '../../../elements'
 
 export interface GenericStrategyConfig {
   readonly element: AnimatedElement
+  readonly source: 'frequency' | 'waveform'
   readonly background?: THREE.Color | THREE.Texture
 }
 
@@ -20,7 +21,7 @@ export const genericStrategy =
     const element = config.element(env)
 
     return pipe(
-      audio.frequency,
+      config.source === 'frequency' ? audio.frequency : audio.waveform,
       Rx.map(AnalysisData.sum),
       Rx.map(x => x / 200),
       RxAnimation.draw(element.update)

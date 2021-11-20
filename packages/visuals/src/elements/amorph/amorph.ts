@@ -5,9 +5,13 @@ import { AnimatedElement } from '../../elements'
 
 export namespace Amorph {
   export interface Config {
+    /** @default 5 */
     readonly distortionFrequency?: number
+    /** @default 1 */
     readonly rotationFactor?: number
+    /** @default 0.02 */
     readonly displasementStrength?: number
+    /** @default 0.5 */
     readonly displasementFrequency?: number
   }
   export const create: AnimatedElement.Factory<Config> =
@@ -31,6 +35,7 @@ export namespace Amorph {
         }
       })
       const mesh = new THREE.Mesh(geometry, material)
+      mesh.position.z = -0.5
       scene.add(mesh)
 
       const update = (velocity: number) => {

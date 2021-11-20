@@ -15,7 +15,12 @@ export const App3D = (): Rx.Observable<MediaStream> =>
           flow(
             AnimationStrategy.create(
               genericStrategy({
-                element: Amorph.create({ distortionFrequency: 2, displasementStrength: 0.001 })
+                element: Amorph.create({
+                  distortionFrequency: 2,
+                  displasementStrength: 0.001,
+                  rotationFactor: 0.2
+                }),
+                source: 'frequency'
               })
             ),
             AnimationStrategy.Animation3D.chain(frequencyPlaneStrategy())
