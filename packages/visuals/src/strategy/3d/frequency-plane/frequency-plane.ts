@@ -10,7 +10,10 @@ export interface FrequencyPlaneConfig {
    * @default 0
    */
   readonly noiseStrength?: number
+  /** @default A */
   readonly noiseType?: FrequencyPlaneConfig.NoiseType
+  /** @default false */
+  readonly colored?: boolean
 }
 
 export namespace FrequencyPlaneConfig {
@@ -27,7 +30,8 @@ export namespace FrequencyPlaneConfig {
 export const frequencyPlaneStrategy =
   ({
     noiseStrength = 0,
-    noiseType = FrequencyPlaneConfig.NoiseType.A
+    noiseType = FrequencyPlaneConfig.NoiseType.A,
+    colored = false
   }: FrequencyPlaneConfig): AnimationStrategy.AnimationFactory<AnimationStrategy.Animation3D> =>
   audio =>
   env => {
@@ -43,7 +47,8 @@ export const frequencyPlaneStrategy =
         frequency: { value: new Array(256) },
         time: { value: 0 },
         noiseStrength: { value: noiseStrength },
-        noiseType: { value: noiseType }
+        noiseType: { value: noiseType },
+        colored: { value: colored }
       },
       transparent: false,
       depthTest: false,
@@ -58,7 +63,7 @@ export const frequencyPlaneStrategy =
     mesh.translateX(0.5)
     env.camera.position.z = 1
     env.scene.add(mesh, meshReversed)
-
+    env.controls.enableRotate = true
     return pipe(
       audio.frequency,
       RxAnimation.draw(data => {

@@ -10,7 +10,8 @@ float ease(float n) {
 	return (cos(PI * n) - 1.) / 2.;
 }
 
-varying float vMagnitude;
+varying vec3 vPosition;
+varying float vNoise;
 
 #pragma glslify: perlin3d = require('../../../../utils/shader/perlin3d.glsl')
 
@@ -18,6 +19,7 @@ void main() {
 	vec3 pos = position;
 	int index = int(floor((pos.x + 0.5) * 64.));
 	float height = frequency[index] * 0.003 - abs(pos.y * 0.75);
+	vNoise = 1.;
 	if (height + pos.z > 0.) {
 		pos.z -= ease(height);
 		if (noiseStrength > 0.) {
@@ -36,12 +38,14 @@ void main() {
 				base = pos.zy;
 			}
 			float perlinStrength = perlin3d(vec3(base, time * 0.01));
-			pos += perlinStrength * noiseStrength;
+			float noise = perlinStrength * noiseStrength;
+			pos += noise;
+			vNoise = noise;
 		}
 	}
 	vec4 modelPosition = modelMatrix * vec4(pos, 1.0);
     vec4 viewPosition = viewMatrix * modelPosition;
     gl_Position = projectionMatrix * viewPosition;
 	gl_PointSize = particleSize;
-	vMagnitude = pos.z * 10.;
+	vPosition = pos * 10.;
 }

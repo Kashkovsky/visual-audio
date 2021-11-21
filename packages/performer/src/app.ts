@@ -18,7 +18,9 @@ export const App3D = (): Rx.Observable<MediaStream> =>
                 element: Amorph.create({
                   distortionFrequency: 2,
                   displasementStrength: 0.001,
-                  rotationFactor: 0.2
+                  rotationFactor: 0.5,
+                  distance: 0.3,
+                  colored: true
                 }),
                 source: 'frequency'
               })
@@ -26,7 +28,8 @@ export const App3D = (): Rx.Observable<MediaStream> =>
             AnimationStrategy.Animation3D.chain(
               frequencyPlaneStrategy({
                 noiseStrength: 0.5,
-                noiseType: FrequencyPlaneConfig.NoiseType.E
+                noiseType: FrequencyPlaneConfig.NoiseType.E,
+                colored: true
               })
             )
           )
