@@ -5,7 +5,9 @@ uniform float imageSize;
 varying vec2 vCoordinates;
 varying vec3 vPos;
 
- void main() {
+#pragma glslify: vignette = require('../../../../utils/shader/vignette.glsl')
+
+void main() {
 	vec2 xy = gl_PointCoord.xy - vec2(0.5);
     float ll = length(xy);
 	
@@ -14,6 +16,8 @@ varying vec3 vPos;
 	vec4 image = texture2D(t1, myUv);
 	 
 	float alpha = 1. - clamp(0.,1., abs(vPos.z / 900.));
+	float radius = imageSize/ 2.;
+	alpha = vignette(vCoordinates.xy, radius, alpha);
 
 	gl_FragColor = image;
 	gl_FragColor.a *= step(ll, 0.5) * maskTexture.r*alpha;

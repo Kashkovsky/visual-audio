@@ -14,6 +14,7 @@ export interface FrequencyPlaneConfig {
   readonly noiseType?: FrequencyPlaneConfig.NoiseType
   /** @default false */
   readonly colored?: boolean
+  readonly background?: THREE.Color | THREE.Texture
 }
 
 export namespace FrequencyPlaneConfig {
@@ -31,7 +32,8 @@ export const frequencyPlaneStrategy =
   ({
     noiseStrength = 0,
     noiseType = FrequencyPlaneConfig.NoiseType.A,
-    colored = false
+    colored = false,
+    background
   }: FrequencyPlaneConfig): AnimationStrategy.AnimationFactory<AnimationStrategy.Animation3D> =>
   audio =>
   env => {
@@ -42,7 +44,7 @@ export const frequencyPlaneStrategy =
       fragmentShader: fragment,
       vertexShader: vertex,
       uniforms: {
-        particleSize: { value: 6 },
+        particleSize: { value: 3 },
         imageSize: { value: imageSize },
         frequency: { value: new Array(256) },
         time: { value: 0 },
@@ -55,6 +57,9 @@ export const frequencyPlaneStrategy =
       depthWrite: false
     })
 
+    if (background) {
+      env.scene.background = background
+    }
     const mesh = new THREE.Points(planeGeometry, material)
     mesh.rotateOnAxis(new THREE.Vector3(1, 0, 0), -45)
     const meshReversed = mesh.clone()

@@ -6,11 +6,12 @@ import * as vertex from './shaders/vertexParticles.glsl'
 import * as mask from './textures/mask.png'
 
 export interface ParticleDissolveStrategyConfig {
-  readonly imageUrl: string
+  readonly imageUrl?: string
   readonly tolerance?: number
   readonly imageSize?: number
   readonly particleSize?: number
   readonly initialDistortion?: number
+  readonly fromCamera?: boolean
 }
 
 export namespace ParticleDissolveStrategyConfig {
@@ -40,7 +41,6 @@ export const particleDissolveStrategy = flow(
       camera.near = 0.1
       camera.far = 3000
       const loader = new THREE.TextureLoader()
-      const portraitTexture = loader.load(config.imageUrl)
       const maskTexture = loader.load(mask)
 
       const material = new THREE.ShaderMaterial({
@@ -51,7 +51,7 @@ export const particleDissolveStrategy = flow(
           particleSize: { value: config.particleSize },
           imageSize: { value: config.imageSize },
           progress: { value: 0 },
-          t1: { value: portraitTexture },
+          t1: { value: null },
           mask: { value: maskTexture },
           move: { value: 0 },
           time: { value: 0 },
@@ -61,6 +61,14 @@ export const particleDissolveStrategy = flow(
         depthTest: false,
         depthWrite: false
       })
+
+      if (config.imageUrl) {
+        material.uniforms.t1.value = loader.load(config.imageUrl)
+      }
+
+      if (config.fromCamera) {
+        setVideoTexture(config, material)
+      }
 
       const geometry = new THREE.BufferGeometry()
       const numberOfParticles = config.imageSize * config.imageSize
@@ -101,3 +109,22 @@ export const particleDissolveStrategy = flow(
       )
     }
 )
+
+// TODO: move to engine
+function setVideoTexture(config: ParticleDissolveStrategyConfig, material: THREE.ShaderMaterial) {
+  void navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+    const video = document.createElement('video')
+    Object.assign(video, {
+      srcObject: stream,
+      height: config.imageSize,
+      width: config.imageSize,
+      autoplay: true
+    })
+    const videoTexture = new THREE.VideoTexture(video)
+    videoTexture.generateMipmaps = false
+    videoTexture.minFilter = THREE.NearestFilter
+    videoTexture.magFilter = THREE.NearestFilter
+    videoTexture.format = THREE.RGBFormat
+    material.uniforms.t1.value = videoTexture
+  })
+}

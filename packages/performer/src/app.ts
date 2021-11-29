@@ -1,7 +1,6 @@
 import { Sound, Rx, AnimationStrategy } from '@va/engine'
-import { Amorph, FrequencyPlaneConfig, frequencyPlaneStrategy, genericStrategy } from '@va/visuals'
+import { particleDissolveStrategy } from '@va/visuals'
 import { flow, pipe } from 'fp-ts/es6/function'
-
 export const App3D = (): Rx.Observable<MediaStream> =>
   pipe(
     Sound.createFor(
@@ -14,22 +13,8 @@ export const App3D = (): Rx.Observable<MediaStream> =>
         Sound.AnalysedNode.attachAnimation(
           flow(
             AnimationStrategy.create(
-              genericStrategy({
-                element: Amorph.create({
-                  distortionFrequency: 2,
-                  displasementStrength: 0.001,
-                  rotationFactor: 0.5,
-                  distance: 0.3,
-                  colored: true
-                }),
-                source: 'frequency'
-              })
-            ),
-            AnimationStrategy.Animation3D.chain(
-              frequencyPlaneStrategy({
-                noiseStrength: 0.5,
-                noiseType: FrequencyPlaneConfig.NoiseType.E,
-                colored: true
+              particleDissolveStrategy({
+                fromCamera: true
               })
             )
           )
