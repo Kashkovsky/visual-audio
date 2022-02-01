@@ -4,6 +4,7 @@ export interface Rect {
   readonly width: number
   readonly height: number
 }
+
 export namespace Rect {
   export const empty: Rect = {
     top: 0,
@@ -29,4 +30,13 @@ export namespace Rect {
       (b: Point): number =>
         Math.sqrt(Math.abs(Math.pow(b.x - a.x, 2) + Math.pow(b.y - a.y, 2)))
   }
+}
+
+export interface Dimensions {
+  readonly width: number
+  readonly height: number
+}
+
+export namespace Dimensions {
+  export const empty: Dimensions = { width: 0, height: 0 }
 }

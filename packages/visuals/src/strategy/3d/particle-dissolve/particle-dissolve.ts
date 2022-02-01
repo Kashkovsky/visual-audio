@@ -1,9 +1,10 @@
 import * as THREE from 'three'
-import { RxAnimation, AnalysisData, Rx, AnimationStrategy } from '@va/engine'
+import { RxAnimation, AnalysisData, Rx, AnimationStrategy, UserMediaUtils } from '@va/engine'
 import { flow, pipe } from 'fp-ts/es6/function'
 import * as fragment from './shaders/fragment.glsl'
 import * as vertex from './shaders/vertexParticles.glsl'
 import * as mask from './textures/mask.png'
+import * as TE from 'fp-ts/es6/TaskEither'
 
 export interface ParticleDissolveStrategyConfig {
   readonly imageUrl?: string
@@ -66,9 +67,15 @@ export const particleDissolveStrategy = flow(
         material.uniforms.t1.value = loader.load(config.imageUrl)
       }
 
-      if (config.fromCamera) {
-        setVideoTexture(config, material)
-      }
+      const setCameraCapture = config.fromCamera
+        ? pipe(
+            UserMediaUtils.cameraToTexture({ width: config.imageSize, height: config.imageSize }),
+            TE.map(texture => (material.uniforms.t1.value = texture)),
+            t => t(),
+            Rx.from,
+            Rx.ignoreElements()
+          )
+        : Rx.EMPTY
 
       const geometry = new THREE.BufferGeometry()
       const numberOfParticles = config.imageSize * config.imageSize
@@ -98,33 +105,17 @@ export const particleDissolveStrategy = flow(
       const mesh = new THREE.Points(geometry, material)
       scene.add(mesh)
 
-      return pipe(
-        audio.frequency,
-        Rx.map(AnalysisData.Frequency.pick(AnalysisData.Frequency.Fraction.subBass)),
-        Rx.map(AnalysisData.mean),
-        RxAnimation.draw(vel => {
-          material.uniforms.time.value += 1
-          material.uniforms.move.value = vel / config.tolerance
-        })
+      return Rx.mergeStatic(
+        setCameraCapture,
+        pipe(
+          audio.frequency,
+          Rx.map(AnalysisData.Frequency.pick(AnalysisData.Frequency.Fraction.subBass)),
+          Rx.map(AnalysisData.mean),
+          RxAnimation.draw(vel => {
+            material.uniforms.time.value += 1
+            material.uniforms.move.value = vel / config.tolerance
+          })
+        )
       )
     }
 )
-
-// TODO: move to engine
-function setVideoTexture(config: ParticleDissolveStrategyConfig, material: THREE.ShaderMaterial) {
-  void navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
-    const video = document.createElement('video')
-    Object.assign(video, {
-      srcObject: stream,
-      height: config.imageSize,
-      width: config.imageSize,
-      autoplay: true
-    })
-    const videoTexture = new THREE.VideoTexture(video)
-    videoTexture.generateMipmaps = false
-    videoTexture.minFilter = THREE.NearestFilter
-    videoTexture.magFilter = THREE.NearestFilter
-    videoTexture.format = THREE.RGBFormat
-    material.uniforms.t1.value = videoTexture
-  })
-}

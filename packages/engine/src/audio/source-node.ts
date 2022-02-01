@@ -1,6 +1,7 @@
 import { pipe } from 'fp-ts/es6/function'
 import * as RTE from 'fp-ts/es6/ReaderTaskEither'
 import * as TE from 'fp-ts/es6/TaskEither'
+import { UserMediaUtils } from '../utils'
 
 export interface SourceNode extends AudioNode {
   readonly mediaStream: MediaStream
@@ -12,10 +13,7 @@ export namespace SourceNode {
     constraints: MediaStreamConstraints
   ) => RTE.ReaderTaskEither<AudioContext, Error, SourceNode> = constr => ctx =>
     pipe(
-      TE.tryCatch(
-        () => navigator.mediaDevices.getUserMedia(constr),
-        (e: Error) => new Error(e.message)
-      ),
+      UserMediaUtils.getUserMedia(constr),
       TE.map(stream => ctx.createMediaStreamSource(stream))
     )
 
