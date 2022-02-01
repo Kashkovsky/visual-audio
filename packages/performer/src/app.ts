@@ -5,7 +5,8 @@ import { flow, pipe } from 'fp-ts/es6/function'
 const analyzerConfig: Sound.AnalysedNode.AnalyserConfig = {
   minDecibels: -90,
   maxDecibels: -10,
-  fftSize: 256
+  fftSize: 256,
+  mute: true
 }
 
 const animation = AnimationStrategy.create(

@@ -1,6 +1,6 @@
 import { pipe } from 'fp-ts/es6/function'
 import * as TE from 'fp-ts/es6/TaskEither'
-import { Dimensions } from 'geometry/rect'
+import { Dimensions } from '../geometry/rect'
 import * as THREE from 'three'
 
 export namespace UserMediaUtils {
