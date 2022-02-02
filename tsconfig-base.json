@@ -16,14 +16,13 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
-    "allowSyntheticDefaultImports": false,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
     "strictPropertyInitialization": false,
     "strictFunctionTypes": false,
     "strictNullChecks": true,
     "incremental": true,
     "noImplicitAny": true,
-    "skipLibCheck": true,
     "lib": ["es2017.object", "es6", "es2016", "dom", "scripthost"]
   }
 }

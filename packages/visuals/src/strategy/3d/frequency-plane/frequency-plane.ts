@@ -1,8 +1,8 @@
 import { RxAnimation, AnimationStrategy } from '@va/engine'
 import { pipe } from 'fp-ts/es6/function'
 import * as THREE from 'three'
-import * as fragment from './shaders/fragment.glsl'
-import * as vertex from './shaders/vertex.glsl'
+import fragment from './shaders/fragment.glsl'
+import vertex from './shaders/vertex.glsl'
 
 export interface FrequencyPlaneConfig {
   /**
@@ -38,13 +38,13 @@ export const frequencyPlaneStrategy =
   audio =>
   env => {
     const planeGeometry = new THREE.PlaneBufferGeometry(1, 1, 64, 64)
-    const imageSize = 512
+    const imageSize = 522
     const material = new THREE.ShaderMaterial({
       side: THREE.DoubleSide,
       fragmentShader: fragment,
       vertexShader: vertex,
       uniforms: {
-        particleSize: { value: 3 },
+        particleSize: { value: 4 },
         imageSize: { value: imageSize },
         frequency: { value: new Array(256) },
         time: { value: 0 },
@@ -68,7 +68,6 @@ export const frequencyPlaneStrategy =
     mesh.translateX(0.5)
     env.camera.position.z = 1
     env.scene.add(mesh, meshReversed)
-    env.controls.enableRotate = true
     return pipe(
       audio.frequency,
       RxAnimation.draw(data => {

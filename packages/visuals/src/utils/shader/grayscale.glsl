@@ -6,5 +6,3 @@ vec4 grayscale(vec4 texture, float factor) {
 vec4 grayscale(vec4 texture) {
 	return grayscale(texture, 0.0);
 }
-
-#pragma glslify: export(grayscale)

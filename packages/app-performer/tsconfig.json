@@ -4,7 +4,8 @@
     "baseUrl": "./src",
     "rootDir": "./src",
     "outDir": "lib",
+    "jsx": "react"
   },
   "include": ["src/**/*"],
-  "references": [{ "path": "../engine" }]
+  "references": [{ "path": "../engine" }, { "path": "../visuals" }, { "path": "../components" }]
 }

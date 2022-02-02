@@ -6,8 +6,8 @@ uniform float vDisplacementStrength;
 varying vec3 vNormal;
 varying float vPerlinStrength;
 
-#pragma glslify: perlin3d = require('../../../utils/shader/perlin3d.glsl')
-#pragma glslify: perlin4d = require('../../../utils/shader/perlin4d.glsl')
+@import ../../../utils/shader/perlin3d;
+@import ../../../utils/shader/perlin4d;
 
 void main(){
 	vec3 newPosition = position;

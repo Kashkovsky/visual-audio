@@ -6,5 +6,5 @@
     "outDir": "lib",
     "incremental": true
   },
-  "include": ["src/**/*", "../visuals/src/utils/user-media.ts"]
+  "include": ["src/**/*"]
 }

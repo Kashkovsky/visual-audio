@@ -18,8 +18,8 @@ export namespace VAWorker {
   }
   export const create = ({ worker, options, canvas }: VAWorker.Config): VAWorker => {
     const offscreen = canvasToOffscreen(canvas)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const send = (msg: VAWorker.WorkerMessage, options?: any) => worker.postMessage(msg, options)
+    const send = (msg: VAWorker.WorkerMessage, options?: any) =>
+      worker.postMessage(msg, options)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     worker.postMessage(VAWorker.WorkerMessage.Init.create(options, offscreen), [offscreen as any])
 

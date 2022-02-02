@@ -1,0 +1,15 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/rush/v5/command-line.schema.json",
+
+  "commands": [
+    {
+      "name": "dev",
+      "commandKind": "bulk",
+      "summary": "Build projects and watch for changes",
+      "description": "For details, see the article \"Using watch mode\" on the Rush website: https://rushjs.io/",
+      "incremental": true,
+      "enableParallelism": true,
+      "watchForChanges": true
+    }
+  ]
+}

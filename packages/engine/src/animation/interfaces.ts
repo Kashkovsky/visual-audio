@@ -5,7 +5,6 @@ import { Rx } from '../rx'
 import Konva from 'konva'
 import * as THREE from 'three'
 import * as O from 'fp-ts/es6/Option'
-import { OrbitControls } from 'three-orbitcontrols-ts'
 import { Dimensions } from '../geometry'
 export interface AnimationStrategy<Animation extends AnimationStrategy.Animation> {
   readonly animation: Animation
@@ -88,7 +87,6 @@ export namespace AnimationStrategy {
       readonly camera: THREE.PerspectiveCamera
       readonly renderer: THREE.Renderer
       readonly canvas: HTMLCanvasElement
-      readonly controls: OrbitControls
     }
 
     export interface RenderOptions {
@@ -126,8 +124,6 @@ export namespace AnimationStrategy {
             renderer.setSize(window.innerWidth, window.innerHeight)
             document.body.prepend(renderer.domElement)
 
-            const controls = new OrbitControls(camera, renderer.domElement)
-
             const resizeObserver = Rx.fromEvent(window, 'resize').pipe(
               Rx.tap(() => {
                 camera.aspect = window.innerWidth / window.innerHeight
@@ -153,12 +149,10 @@ export namespace AnimationStrategy {
                   scene,
                   camera,
                   renderer,
-                  controls,
                   canvas: renderer.domElement
                 })
                 .pipe(
                   Rx.tap(() => {
-                    controls.update()
                     renderer.render(scene, camera)
                   }),
                   Rx.ignoreElements(),

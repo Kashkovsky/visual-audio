@@ -16,5 +16,3 @@ float vignette(vec2 coord, float radius, float alpha) {
 
 	return alpha;
 }
-
-#pragma glslify: export(vignette)

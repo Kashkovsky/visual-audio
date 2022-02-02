@@ -1,13 +1,22 @@
 # visual-audio
 
-Run performer: `npm i && npm run dev`
+## Pull the latest changes from Git
+$ git pull
 
-Open: `localhost:1234`
+## Install NPM packages as needed
+$ rush update
+
+## Do a clean rebuild of everything
+$ rush rebuild
+
+## Run watch & server
+$ cd packages/app-performer && rushx start
+
 
 ### TODO:
 
 - [x] Set up monorepo
-- [ ] Move audio processing and GL logic to Web Worker (AudioWorklet / OffscreenCanvas)
+- [x] Move audio processing and GL logic to Web Worker (AudioWorklet / OffscreenCanvas)
 - [ ] Allow audio source from file
 - [x] Implement video recorder
 - [ ] Live animation controls via MIDI

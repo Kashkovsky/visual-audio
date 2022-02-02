@@ -13,7 +13,7 @@ float ease(float n) {
 varying vec3 vPosition;
 varying float vNoise;
 
-#pragma glslify: perlin3d = require('../../../../utils/shader/perlin3d.glsl')
+@import ../../../../utils/shader/perlin3d;
 
 void main() {
 	vec3 pos = position;

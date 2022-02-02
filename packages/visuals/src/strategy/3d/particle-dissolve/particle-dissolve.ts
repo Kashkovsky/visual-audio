@@ -1,8 +1,8 @@
 import * as THREE from 'three'
 import { RxAnimation, AnalysisData, Rx, AnimationStrategy, UserMediaUtils } from '@va/engine'
 import { flow, pipe } from 'fp-ts/es6/function'
-import * as fragment from './shaders/fragment.glsl'
-import * as vertex from './shaders/vertexParticles.glsl'
+import fragment from './shaders/fragment.glsl'
+import vertex from './shaders/vertexParticles.glsl'
 import * as mask from './textures/mask.png'
 import * as TE from 'fp-ts/es6/TaskEither'
 

@@ -1,17 +1,14 @@
-//	Classic Perlin 3D Noise 
-//	by Stefan Gustavson
-//
 vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
 vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
 vec4 fade(vec4 t) {return t*t*t*(t*(t*6.0-15.0)+10.0);}
 
 float perlin4d(vec4 P){
-  vec4 Pi0 = floor(P); // Integer part for indexing
-  vec4 Pi1 = Pi0 + 1.0; // Integer part + 1
+  vec4 Pi0 = floor(P); 
+  vec4 Pi1 = Pi0 + 1.0;
   Pi0 = mod(Pi0, 289.0);
   Pi1 = mod(Pi1, 289.0);
-  vec4 Pf0 = fract(P); // Fractional part for interpolation
-  vec4 Pf1 = Pf0 - 1.0; // Fractional part - 1.0
+  vec4 Pf0 = fract(P);
+  vec4 Pf1 = Pf0 - 1.0;
   vec4 ix = vec4(Pi0.x, Pi1.x, Pi0.x, Pi1.x);
   vec4 iy = vec4(Pi0.yy, Pi1.yy);
   vec4 iz0 = vec4(Pi0.zzzz);
@@ -269,5 +266,3 @@ float perlin4d(vec4 P, vec4 rep){
   float n_xyzw = mix(n_yzw.x, n_yzw.y, fade_xyzw.x);
   return 2.2 * n_xyzw;
 }
-
-#pragma glslify: export(perlin4d)
