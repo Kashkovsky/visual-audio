@@ -16,11 +16,15 @@ export interface Sound {
 }
 
 export namespace Sound {
-  const ctor =
-    window.AudioContext ||
-    (window as unknown as { webkitAudioContext: AudioContext }).webkitAudioContext ||
-    (window as unknown as { mozAudioContext: AudioContext }).mozAudioContext
+  const ctor = window
+    ? window.AudioContext ||
+      (window as unknown as { webkitAudioContext: AudioContext }).webkitAudioContext ||
+      (window as unknown as { mozAudioContext: AudioContext }).mozAudioContext
+    : null
   export const create: Lazy<Sound> = () => {
+    if (!ctor) {
+      throw new Error('No context')
+    }
     const context = new ctor()
     const observableContext =
       context.state !== 'running'

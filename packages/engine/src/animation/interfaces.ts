@@ -1,4 +1,4 @@
-import { Sound } from '../audio'
+import { AnalysisData, Sound } from '../audio'
 import * as R from 'fp-ts/es6/Reader'
 import { pipe } from 'fp-ts/es6/function'
 import { Rx } from '../rx'
@@ -6,10 +6,15 @@ import Konva from 'konva'
 import * as THREE from 'three'
 import * as O from 'fp-ts/es6/Option'
 import { OrbitControls } from 'three-orbitcontrols-ts'
-
+import { Dimensions } from '../geometry'
 export interface AnimationStrategy<Animation extends AnimationStrategy.Animation> {
   readonly animation: Animation
   readonly analyser: Sound.AnalysedNode
+}
+
+export interface BackgroundAnimationStrategy<Animation extends AnimationStrategy.Animation> {
+  readonly animation: Animation
+  readonly data: AnalysisData.Combined
 }
 
 export namespace AnimationStrategy {
@@ -20,6 +25,10 @@ export namespace AnimationStrategy {
     Sound.AnalysedNode,
     Animation
   >
+  export type BackgroundAnimationFactory<Animation extends AnimationStrategy.Animation> = R.Reader<
+    AnalysisData.Combined,
+    Animation
+  >
   export const create =
     <Animation extends AnimationStrategy.Animation>(
       animationFactory: AnimationFactory<Animation>
@@ -27,6 +36,15 @@ export namespace AnimationStrategy {
     (analyser: Sound.AnalysedNode): AnimationStrategy<Animation> => ({
       animation: animationFactory(analyser),
       analyser
+    })
+
+  export const createBackground =
+    <Animation extends AnimationStrategy.Animation>(
+      animationFactory: R.Reader<AnalysisData.Combined, Animation>
+    ) =>
+    (data: AnalysisData.Combined): BackgroundAnimationStrategy<Animation> => ({
+      animation: animationFactory(data),
+      data
     })
 
   export namespace Animation2D {
@@ -83,7 +101,10 @@ export namespace AnimationStrategy {
         readonly far?: number
       }
       readonly rendererOptions?: THREE.WebGLRendererParameters
+      readonly dimensions: Dimensions
     }
+
+    /** @deprecated */
     export const toScene =
       ({ cameraOptions: { fov, near, far }, rendererOptions }: RenderOptions) =>
       (strategy: Rx.Observable<AnimationStrategy<Animation3D>>): Rx.Observable<MediaStream> =>

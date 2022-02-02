@@ -6,7 +6,7 @@
   "private": true,
   "types": "lib/index.d.ts",
   "module": "lib/index.js",
-  "main": "lib/index.js",
+  "source": "src/index.ts",
   "directories": {
     "lib": "lib"
   },
@@ -26,8 +26,9 @@
     "konva": "^8.2.2",
     "mathjs": "^9.5.0",
     "fp-ts": "^2.11.1",
-    "rxjs": "^7.3.0",
-    "three": "^0.134.0"
+    "rxjs": "^6.6.7",
+    "three": "^0.134.0",
+    "three-orbitcontrols-ts": "^0.1.2"
   },
   "devDependencies": {
     "@types/node": "^16.7.1",

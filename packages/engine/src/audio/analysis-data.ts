@@ -6,10 +6,15 @@ import { Opaque } from '../utils'
 import { mean as Mean, sum as Sum } from 'mathjs'
 import { Endomorphism } from 'fp-ts/es6/Endomorphism'
 import { Predicate } from 'fp-ts/es6/Predicate'
+import { Rx } from 'rx'
 
 export type AnalysisData = AnalysisData.Frequency | AnalysisData.Waveform
 
 export namespace AnalysisData {
+  export interface Combined {
+    readonly frequency: Rx.Observable<AnalysisData.Frequency>
+    readonly waveform: Rx.Observable<AnalysisData.Waveform>
+  }
   export const from = (data: Uint8Array): AnalysisData => data as AnalysisData
   export const of = (data: Array<number>): AnalysisData => AnalysisData.from(Uint8Array.of(...data))
 

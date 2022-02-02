@@ -7,11 +7,11 @@
     ]
   },
   "scripts": {
-    "postinstall": "lerna bootstrap --hoist",
+    "postinstall": "lerna bootstrap",
     "dev": "npm run dev:performer",
-    "dev:performer": "lerna exec --parallel --ignore @va/app-creator -- npm run dev",
+    "dev:performer": "lerna run --stream --concurrency 6 --no-sort --ignore @va/app-creator dev",
     "dev:creator": "lerna exec --parallel --ignore @va/app-performer -- npm run dev",
-    "build:base": "lerna bootstrap --hoist --ignore @va/app-*",
+    "build:base": "lerna bootstrap --ignore @va/app-*",
     "build:performer": "npm run clean:build && npm run postinstall && lerna exec --scope @va/app-performer -- npm run build",
     "build:creator": "npm run clean:build && npm run postinstall && lerna exec --scope @va/app-creator -- npm run build",
     "clean:build": "lerna exec --parallel -- npm run clean:build && rm -rf .parcel-cache && rm -rf dist",
@@ -20,22 +20,24 @@
     "prettier:lint-staged": "prettier --write",
     "eslint:lint-staged": "eslint --max-warnings 0 --fix",
     "prepare": "husky install",
-    "deploy": "gh-pages -d dist",
+    "deploy": "ts-node ./scripts/deploy",
     "gen:docs": "typedoc --entryPointStrategy packages .",
     "docs": "npx http-server docs"
   },
   "dependencies": {
+    "@grammarly/focal": "^0.8.5",
     "fp-ts": "^2.11.1",
-    "rxjs": "^7.3.0",
-    "three": "^0.134.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "@grammarly/focal": "^0.8.5"
+    "rxjs": "^6.6.7",
+    "three": "^0.134.0"
   },
   "devDependencies": {
-    "@parcel/transformer-typescript-types": "^2.0.1",
+    "@parcel/packager-ts": "^2.2.1",
+    "@parcel/transformer-glsl": "^2.2.1",
+    "@parcel/transformer-typescript-tsc": "^2.2.1",
+    "@parcel/transformer-typescript-types": "^2.2.1",
     "@types/node": "^16.7.1",
-    "@types/three": "^0.133.1",
     "@types/react": "^17.0.35",
     "@types/react-dom": "^17.0.11",
     "@typescript-eslint/eslint-plugin": "^4.33.0",

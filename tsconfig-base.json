@@ -5,7 +5,7 @@
     "declarationMap": true,
     "pretty": true,
     "target": "es6",
-    "module": "ES2015",
+    "module": "esnext",
     "importHelpers": true,
     "sourceMap": true,
     "emitDecoratorMetadata": true,
@@ -23,6 +23,7 @@
     "strictNullChecks": true,
     "incremental": true,
     "noImplicitAny": true,
+    "skipLibCheck": true,
     "lib": ["es2017.object", "es6", "es2016", "dom", "scripthost"]
   }
 }

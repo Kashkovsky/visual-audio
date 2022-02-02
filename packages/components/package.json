@@ -6,7 +6,7 @@
   "private": true,
   "types": "lib/index.d.ts",
   "module": "lib/index.js",
-  "main": "lib/index.js",
+  "source": "src/index.ts",
   "directories": {
     "lib": "lib"
   },

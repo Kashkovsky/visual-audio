@@ -1,6 +1,7 @@
 {
   "extends": "./tsconfig-base.json",
   "files": [],
+  "include": ["./scripts/**/*.ts"],
   "references": [
     { "path": "packages/engine" },
     { "path": "packages/visuals" },

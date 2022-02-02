@@ -1,8 +1,8 @@
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
 import { App3D } from './app'
-import { RecorderSwitch } from '@va/components'
+import './worker-hack.js'
 
-const Main = () => <RecorderSwitch>{App3D()}</RecorderSwitch>
+// const Main = () => <RecorderSwitch>{App3D()}</RecorderSwitch>
 
-ReactDOM.render(<Main />, document.getElementById('root'))
+// ReactDOM.render(<Main />, document.getElementById('root'))
+
+App3D().subscribe()

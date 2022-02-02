@@ -7,17 +7,10 @@
   "source": "src/index.ts",
   "module": "lib/index.js",
   "types": "lib/index.d.ts",
-  "targets": {
-    "types": false
-  },
   "typedocMain": "src/index.ts",
   "scripts": {
-    "dev": "concurrently \"npm:dev:*\"",
-    "build": "concurrently \"npm:build:*\"",
-    "dev:package": "parcel watch",
-    "dev:types": "tsc --watch",
-    "build:types": "tsc",
-    "build:package": "parcel build",
+    "dev": "parcel watch --hmr-port 999",
+    "build": "parcel build",
     "prepare": "npm run build",
     "clean:build": "rm -rf .parcel-cache && rm -rf lib"
   },
@@ -27,20 +20,20 @@
     "glslify": "^7.1.1",
     "konva": "^8.2.2",
     "mathjs": "^9.5.0",
-    "rxjs": "^7.3.0",
+    "rxjs": "^6.6.7",
     "three": "^0.134.0",
     "three-orbitcontrols-ts": "^0.1.2",
     "@va/engine": "1.0.0"
   },
   "devDependencies": {
-    "@parcel/transformer-glsl": "latest",
-    "@parcel/transformer-image": "latest",
+    "@parcel/transformer-glsl": "^2.2.1",
+    "@parcel/transformer-image": "^2.2.1",
+    "@parcel/transformer-typescript-tsc": "^2.2.1",
+    "parcel-plugin-static-files-copy": "^2.6.0",
     "@types/dat.gui": "^0.7.7",
     "@types/node": "^16.7.1",
     "@types/three": "^0.133.1",
-    "parcel": "^2.2.1",
-    "parcel-plugin-static-files-copy": "^2.6.0",
-    "concurrently": "^6.4.0",
-    "typescript": "^4.4.3"
+    "typescript": "^4.4.3",
+    "parcel": "^2.2.1"
   }
 }

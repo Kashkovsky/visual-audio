@@ -1,6 +1,7 @@
 import { RxAnimation, AnalysisData, Rx, AnimationStrategy } from '@va/engine'
 import { pipe } from 'fp-ts/es6/function'
 import { AnimatedElement } from '../../../elements'
+import * as THREE from 'three'
 
 export interface GenericStrategyConfig {
   readonly element: AnimatedElement
