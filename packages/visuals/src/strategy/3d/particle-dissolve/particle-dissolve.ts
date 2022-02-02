@@ -67,15 +67,12 @@ export const particleDissolveStrategy = flow(
         material.uniforms.t1.value = loader.load(config.imageUrl)
       }
 
-      const setCameraCapture = config.fromCamera
-        ? pipe(
-            UserMediaUtils.cameraToTexture({ width: config.imageSize, height: config.imageSize }),
-            TE.map(texture => (material.uniforms.t1.value = texture)),
-            t => t(),
-            Rx.from,
-            Rx.ignoreElements()
-          )
-        : Rx.EMPTY
+      if (config.fromCamera) {
+        void pipe(
+          UserMediaUtils.cameraToTexture({ width: config.imageSize, height: config.imageSize }),
+          TE.map(texture => (material.uniforms.t1.value = texture))
+        )()
+      }
 
       const geometry = new THREE.BufferGeometry()
       const numberOfParticles = config.imageSize * config.imageSize
@@ -105,17 +102,14 @@ export const particleDissolveStrategy = flow(
       const mesh = new THREE.Points(geometry, material)
       scene.add(mesh)
 
-      return Rx.mergeStatic(
-        setCameraCapture,
-        pipe(
-          audio.frequency,
-          Rx.map(AnalysisData.Frequency.pick(AnalysisData.Frequency.Fraction.subBass)),
-          Rx.map(AnalysisData.mean),
-          RxAnimation.draw(vel => {
-            material.uniforms.time.value += 1
-            material.uniforms.move.value = vel / config.tolerance
-          })
-        )
+      return pipe(
+        audio.frequency,
+        Rx.map(AnalysisData.Frequency.pick(AnalysisData.Frequency.Fraction.subBass)),
+        Rx.map(AnalysisData.mean),
+        RxAnimation.draw(vel => {
+          material.uniforms.time.value += 1
+          material.uniforms.move.value = vel / config.tolerance
+        })
       )
     }
 )
