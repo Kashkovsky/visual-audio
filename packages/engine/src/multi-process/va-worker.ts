@@ -9,6 +9,7 @@ import { canvasToOffscreen } from '../utils'
 export interface VAWorker {
   resize: (dimensions?: Dimensions) => void
   frequency: (data: AnalysisData.Frequency) => void
+  waveform: (data: AnalysisData.Waveform) => void
   startAnimation: (name: string, config?: unknown) => void
 }
 
@@ -33,12 +34,14 @@ export namespace VAWorker {
         send
       ),
       frequency: flow(VAWorker.WorkerMessage.Frequency.create, send),
+      waveform: flow(VAWorker.WorkerMessage.Waveform.create, send),
       startAnimation: flow(VAWorker.WorkerMessage.Start.create, send)
     }
   }
   export type WorkerMessage<TCOnfig = unknown> =
     | WorkerMessage.Init
     | WorkerMessage.Frequency
+    | WorkerMessage.Waveform
     | WorkerMessage.Size
     | WorkerMessage.Start<TCOnfig>
 
@@ -67,6 +70,18 @@ export namespace VAWorker {
     export namespace Frequency {
       export const create = (data: AnalysisData.Frequency): VAWorker.WorkerMessage.Frequency => ({
         kind: 'frequency',
+        data
+      })
+    }
+
+    export interface Waveform {
+      readonly kind: 'waveform'
+      readonly data: AnalysisData.Waveform
+    }
+
+    export namespace Waveform {
+      export const create = (data: AnalysisData.Waveform): VAWorker.WorkerMessage.Waveform => ({
+        kind: 'waveform',
         data
       })
     }

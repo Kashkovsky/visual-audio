@@ -33,9 +33,9 @@ export namespace MultiProcessAnimation {
         )
 
         const frequency = node.frequency.pipe(Rx.tap(worker.frequency), Rx.ignoreElements())
+        const waveform = node.waveform.pipe(Rx.tap(worker.waveform), Rx.ignoreElements())
 
-        // TODO: send waveform to worker
-        return Rx.mergeStatic(resizeObserver, frequency, Rx.of(worker))
+        return Rx.mergeStatic(resizeObserver, frequency, waveform, Rx.of(worker))
       })
     )
 }

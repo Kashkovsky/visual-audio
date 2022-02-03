@@ -90,6 +90,9 @@ ctx.addEventListener('message', (e: MessageEvent<VAWorker.WorkerMessage>) => {
     case 'frequency':
       state.frequency.next(e.data.data)
       break
+    case 'waveform':
+      state.waveform.next(e.data.data)
+      break
     case 'size':
       state.size.next(e.data.dimensions)
       break
