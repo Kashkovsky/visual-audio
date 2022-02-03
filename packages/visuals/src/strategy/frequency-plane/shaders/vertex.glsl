@@ -13,7 +13,7 @@ float ease(float n) {
 varying vec3 vPosition;
 varying float vNoise;
 
-@import ../../../../utils/shader/perlin3d;
+@import ../../../utils/shader/perlin3d;
 
 void main() {
 	vec3 pos = position;

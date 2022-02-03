@@ -1,14 +1,12 @@
-import { AnalysisData, Sound } from '../audio'
+import { AnalysisData } from '../audio'
 import * as R from 'fp-ts/es6/Reader'
 import { pipe } from 'fp-ts/es6/function'
 import { Rx } from '../rx'
-import Konva from 'konva'
 import * as THREE from 'three'
-import * as O from 'fp-ts/es6/Option'
 import { Dimensions } from '../geometry'
-export interface AnimationStrategy<Animation extends AnimationStrategy.Animation> {
-  readonly animation: Animation
-  readonly analyser: Sound.AnalysedNode
+export interface AnimationStrategy {
+  readonly animation: AnimationStrategy.Animation
+  readonly data: AnalysisData.Combined
 }
 
 export interface BackgroundAnimationStrategy<Animation extends AnimationStrategy.Animation> {
@@ -17,69 +15,23 @@ export interface BackgroundAnimationStrategy<Animation extends AnimationStrategy
 }
 
 export namespace AnimationStrategy {
-  export type Animation2D = R.Reader<Konva.Stage, Rx.Observable<void>>
   export type Animation3D = R.Reader<Animation3D.Environment, Rx.Observable<void>>
-  export type Animation = Animation2D | Animation3D
-  export type AnimationFactory<Animation extends AnimationStrategy.Animation> = R.Reader<
-    Sound.AnalysedNode,
-    Animation
-  >
-  export type BackgroundAnimationFactory<Animation extends AnimationStrategy.Animation> = R.Reader<
-    AnalysisData.Combined,
-    Animation
-  >
-  export const create =
-    <Animation extends AnimationStrategy.Animation>(
-      animationFactory: AnimationFactory<Animation>
-    ) =>
-    (analyser: Sound.AnalysedNode): AnimationStrategy<Animation> => ({
-      animation: animationFactory(analyser),
-      analyser
-    })
+  export type Animation = Animation3D
+  export type AnimationFactory = R.Reader<AnalysisData.Combined, AnimationStrategy.Animation>
 
-  export const createBackground =
-    <Animation extends AnimationStrategy.Animation>(
-      animationFactory: R.Reader<AnalysisData.Combined, Animation>
-    ) =>
-    (data: AnalysisData.Combined): BackgroundAnimationStrategy<Animation> => ({
+  export const create =
+    (animationFactory: AnimationFactory) =>
+    (data: AnalysisData.Combined): AnimationStrategy => ({
       animation: animationFactory(data),
       data
     })
 
-  export namespace Animation2D {
-    export const toStage =
-      () =>
-      (strategy: Rx.Observable<AnimationStrategy<Animation2D>>): Rx.Observable<MediaStream> =>
-        strategy.pipe(
-          Rx.switchMap(strategy => {
-            const stage = new Konva.Stage({
-              container: 'root',
-              width: window.innerWidth,
-              height: window.innerHeight
-            })
-
-            const stream = stage.bufferCanvas._canvas.captureStream(60)
-            pipe(
-              strategy.analyser.stream,
-              O.map(audioStream => {
-                audioStream.getAudioTracks().forEach(track => stream.addTrack(track))
-              })
-            )
-
-            return strategy.animation(stage).pipe(Rx.ignoreElements(), Rx.startWith(stream))
-          })
-        )
-
-    export const chain =
-      (animationFactory: AnimationFactory<Animation2D>) =>
-      (a: AnimationStrategy<Animation2D>): AnimationStrategy<Animation2D> => ({
-        animation: pipe(
-          a.animation,
-          R.chain(obs => stage => Rx.mergeStatic(obs, animationFactory(a.analyser)(stage)))
-        ),
-        analyser: a.analyser
-      })
-  }
+  export const createBackground =
+    (animationFactory: R.Reader<AnalysisData.Combined, AnimationStrategy.Animation>) =>
+    (data: AnalysisData.Combined): BackgroundAnimationStrategy<Animation> => ({
+      animation: animationFactory(data),
+      data
+    })
 
   export namespace Animation3D {
     export interface Environment {
@@ -105,7 +57,7 @@ export namespace AnimationStrategy {
     /** @deprecated */
     export const toScene =
       ({ cameraOptions: { fov, near, far }, rendererOptions }: RenderOptions) =>
-      (strategy: Rx.Observable<AnimationStrategy<Animation3D>>): Rx.Observable<MediaStream> =>
+      (strategy: Rx.Observable<AnimationStrategy>): Rx.Observable<MediaStream> =>
         strategy.pipe(
           Rx.switchMap(strategy => {
             const scene = new THREE.Scene()
@@ -135,12 +87,6 @@ export namespace AnimationStrategy {
             )
 
             const stream = renderer.domElement.captureStream(60)
-            pipe(
-              strategy.analyser.stream,
-              O.map(audioStream => {
-                audioStream.getAudioTracks().forEach(track => stream.addTrack(track))
-              })
-            )
 
             return Rx.mergeStatic(
               resizeObserver,
@@ -163,13 +109,13 @@ export namespace AnimationStrategy {
         )
 
     export const chain =
-      (animationFactory: AnimationFactory<Animation3D>) =>
-      (a: AnimationStrategy<Animation3D>): AnimationStrategy<Animation3D> => ({
+      (animationFactory: AnimationFactory) =>
+      (a: AnimationStrategy): AnimationStrategy => ({
         animation: pipe(
           a.animation,
-          R.chain(obs => stage => Rx.mergeStatic(obs, animationFactory(a.analyser)(stage)))
+          R.chain(obs => stage => Rx.mergeStatic(obs, animationFactory(a.data)(stage)))
         ),
-        analyser: a.analyser
+        data: a.data
       })
   }
 }

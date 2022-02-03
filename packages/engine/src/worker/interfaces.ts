@@ -18,8 +18,7 @@ export namespace VAWorker {
   }
   export const create = ({ worker, options, canvas }: VAWorker.Config): VAWorker => {
     const offscreen = canvasToOffscreen(canvas)
-    const send = (msg: VAWorker.WorkerMessage, options?: any) =>
-      worker.postMessage(msg, options)
+    const send = (msg: VAWorker.WorkerMessage, options?: any) => worker.postMessage(msg, options)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     worker.postMessage(VAWorker.WorkerMessage.Init.create(options, offscreen), [offscreen as any])
 
@@ -33,7 +32,11 @@ export namespace VAWorker {
       frequency: flow(VAWorker.WorkerMessage.Frequency.create, send)
     }
   }
-  export type WorkerMessage = WorkerMessage.Init | WorkerMessage.Frequency | WorkerMessage.Size
+  export type WorkerMessage<TCOnfig = unknown> =
+    | WorkerMessage.Init
+    | WorkerMessage.Frequency
+    | WorkerMessage.Size
+    | WorkerMessage.Start<TCOnfig>
 
   export namespace WorkerMessage {
     export interface Init {
@@ -79,6 +82,12 @@ export namespace VAWorker {
         kind: 'size',
         dimensions: { width: window.innerWidth, height: window.innerHeight }
       })
+    }
+
+    export interface Start<TCOnfig = unknown> {
+      readonly kind: 'start'
+      readonly strategy: string
+      readonly config: TCOnfig
     }
   }
 }

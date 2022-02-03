@@ -5,8 +5,8 @@ uniform float imageSize;
 varying vec2 vCoordinates;
 varying vec3 vPos;
 
-@import ../../../../utils/shader/vignette.glsl;
-@import ../../../../utils/shader/grayscale.glsl;
+@import ../../../utils/shader/vignette.glsl;
+@import ../../../utils/shader/grayscale.glsl;
 
 void main() {
 	vec2 xy = gl_PointCoord.xy - vec2(0.5);

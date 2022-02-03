@@ -34,7 +34,7 @@ export const frequencyPlaneStrategy =
     noiseType = FrequencyPlaneConfig.NoiseType.A,
     colored = false,
     background
-  }: FrequencyPlaneConfig): AnimationStrategy.BackgroundAnimationFactory<AnimationStrategy.Animation3D> =>
+  }: FrequencyPlaneConfig): AnimationStrategy.AnimationFactory =>
   audio =>
   env => {
     const planeGeometry = new THREE.PlaneBufferGeometry(1, 1, 64, 64)

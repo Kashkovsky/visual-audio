@@ -175,10 +175,8 @@ export namespace Sound {
 
     /** Attaches animation strategy to AnalysedNode */
     export const attachAnimation =
-      (animation: R.Reader<AnalysedNode, AnimationStrategy<AnimationStrategy.Animation>>) =>
-      (
-        analyzedNode: Rx.Observable<AnalysedNode>
-      ): Rx.Observable<AnimationStrategy<AnimationStrategy.Animation>> =>
+      (animation: R.Reader<AnalysedNode, AnimationStrategy>) =>
+      (analyzedNode: Rx.Observable<AnalysedNode>): Rx.Observable<AnimationStrategy> =>
         analyzedNode.pipe(Rx.map(animation))
   }
 }

@@ -22,7 +22,6 @@
   "dependencies": {
     "@ffmpeg/core": "^0.10.0",
     "@ffmpeg/ffmpeg": "^0.10.1",
-    "konva": "^8.2.2",
     "mathjs": "^9.5.0",
     "fp-ts": "^2.11.1",
     "rxjs": "^7.5.2",

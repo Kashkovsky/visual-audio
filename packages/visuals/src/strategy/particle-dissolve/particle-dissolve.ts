@@ -34,7 +34,7 @@ export namespace ParticleDissolveStrategyConfig {
 
 export const particleDissolveStrategy = flow(
   ParticleDissolveStrategyConfig.withDefault,
-  (config): AnimationStrategy.AnimationFactory<AnimationStrategy.Animation3D> =>
+  (config): AnimationStrategy.AnimationFactory =>
     audio =>
     ({ scene, camera }) => {
       camera.fov = 70

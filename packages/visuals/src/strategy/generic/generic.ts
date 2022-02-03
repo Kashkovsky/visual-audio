@@ -1,6 +1,6 @@
 import { RxAnimation, AnalysisData, Rx, AnimationStrategy } from '@va/engine'
 import { pipe } from 'fp-ts/es6/function'
-import { AnimatedElement } from '../../../elements'
+import { AnimatedElement } from '../../elements'
 import * as THREE from 'three'
 
 export interface GenericStrategyConfig {
@@ -10,9 +10,7 @@ export interface GenericStrategyConfig {
 }
 
 export const genericStrategy =
-  (
-    config: GenericStrategyConfig
-  ): AnimationStrategy.AnimationFactory<AnimationStrategy.Animation3D> =>
+  (config: GenericStrategyConfig): AnimationStrategy.AnimationFactory =>
   audio =>
   env => {
     if (config.background) {

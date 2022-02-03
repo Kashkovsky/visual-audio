@@ -80,7 +80,6 @@ importers:
       '@types/node': ^16.7.1
       '@types/three': ^0.133.1
       fp-ts: ^2.11.1
-      konva: ^8.2.2
       mathjs: ^9.5.0
       rxjs: ^7.5.2
       three: ^0.137.5
@@ -89,7 +88,6 @@ importers:
       '@ffmpeg/core': 0.10.0
       '@ffmpeg/ffmpeg': 0.10.1
       fp-ts: 2.11.8
-      konva: 8.3.2
       mathjs: 9.5.2
       rxjs: 7.5.2
       three: 0.137.5
@@ -107,7 +105,6 @@ importers:
       dat.gui: ^0.7.7
       fp-ts: ^2.11.1
       glslify: ^7.1.1
-      konva: ^8.2.2
       mathjs: ^9.5.0
       rxjs: ^7.5.2
       three: ^0.137.5
@@ -123,7 +120,6 @@ importers:
       dat.gui: 0.7.7
       fp-ts: 2.11.8
       glslify: 7.1.1
-      konva: 8.3.2
       mathjs: 9.5.2
       rxjs: 7.5.2
       three: 0.137.5
@@ -141,8 +137,8 @@ importers:
 
 packages:
 
-  /@babel/runtime/7.16.7:
-    resolution: {integrity: sha512-9E9FJowqAsytyOY6LG+1KuueckRL+aQW+mKvXRXnuFGyRAyepJPmEo9vgMfXUA6O9u3IeEdv9MAkppFcaQwogQ==}
+  /@babel/runtime/7.17.0:
+    resolution: {integrity: sha512-etcO/ohMNaNA2UBdaXBBSX/3aEzFMRrVfaPv8Ptc0k+cWpWW0QFiGZ2XnVqQZI1Cf734LbPGmqBKWESfW4x/dQ==}
     engines: {node: '>=6.9.0'}
     dependencies:
       regenerator-runtime: 0.13.9
@@ -517,12 +513,12 @@ packages:
     resolution: {integrity: sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==}
     dev: true
 
-  /accepts/1.3.7:
-    resolution: {integrity: sha512-Il80Qs2WjYlJIBNzNkK6KYqlVMTbZLXgHx2oT0pU/fjRHyEp+PEfEPY0R3WCwAGVOtauxh1hOxNgIf5bv7dQpA==}
+  /accepts/1.3.8:
+    resolution: {integrity: sha512-PYAthTa2m2VKxuvSD3DPC/Gy+U+sOA1LAuT8mkmRuvw+NACSaeXEQ+NHcVF7rONl6qcaxV3Uuemwawk+7+SJLw==}
     engines: {node: '>= 0.6'}
     dependencies:
       mime-types: 2.1.34
-      negotiator: 0.6.2
+      negotiator: 0.6.3
     dev: true
 
   /acorn-import-assertions/1.8.0_acorn@8.7.0:
@@ -717,8 +713,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001305
-      electron-to-chromium: 1.4.61
+      caniuse-lite: 1.0.30001306
+      electron-to-chromium: 1.4.63
       escalade: 3.1.1
       node-releases: 2.0.1
       picocolors: 1.0.0
@@ -748,8 +744,8 @@ packages:
       get-intrinsic: 1.1.1
     dev: true
 
-  /caniuse-lite/1.0.30001305:
-    resolution: {integrity: sha512-p7d9YQMji8haf0f+5rbcv9WlQ+N5jMPfRAnUmZRlNxsNeBO3Yr7RYG6M2uTY1h9tCVdlkJg6YNNc4kiAiBLdWA==}
+  /caniuse-lite/1.0.30001306:
+    resolution: {integrity: sha512-Wd1OuggRzg1rbnM5hv1wXs2VkxJH/AA+LuudlIqvZiCvivF+wJJe2mgBZC8gPMgI7D76PP5CTx8Luvaqc1V6OQ==}
     dev: true
 
   /chalk/4.1.2:
@@ -840,7 +836,7 @@ packages:
     resolution: {integrity: sha512-jaSIDzP9pZVS4ZfQ+TzvtiWhdpFhE2RDHz8QJkpX9SIpLq88VueF5jJw6t+6CUQcAoA6t+x89MLrWAqpfDE8iQ==}
     engines: {node: '>= 0.8.0'}
     dependencies:
-      accepts: 1.3.7
+      accepts: 1.3.8
       bytes: 3.0.0
       compressible: 2.0.18
       debug: 2.6.9
@@ -1059,8 +1055,8 @@ packages:
     resolution: {integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=}
     dev: true
 
-  /electron-to-chromium/1.4.61:
-    resolution: {integrity: sha512-kpzCOOFlx63C9qKRyIDEsKIUgzoe98ump7T4gU+/OLzj8gYkkWf2SIyBjhTSE0keAjMAp3i7C262YtkQOMYrGw==}
+  /electron-to-chromium/1.4.63:
+    resolution: {integrity: sha512-e0PX/LRJPFRU4kzJKLvTobxyFdnANCvcoDCe8XcyTqP58nTWIwdsHvXLIl1RkB39X5yaosLaroMASWB0oIsgCA==}
     dev: true
 
   /emoji-regex/8.0.0:
@@ -1194,7 +1190,7 @@ packages:
     resolution: {integrity: sha512-oxlxJxcQlYwqPWKVJJtvQiwHgosH/LrLSPA+H4UxpyvSS6jC5aH+5MoHFM+KABgTOt0APue4w66Ha8jCUo9QGg==}
     engines: {node: '>= 0.10.0'}
     dependencies:
-      accepts: 1.3.7
+      accepts: 1.3.8
       array-flatten: 1.1.1
       body-parser: 1.19.1
       content-disposition: 0.5.4
@@ -1855,10 +1851,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /konva/8.3.2:
-    resolution: {integrity: sha512-vWi51qFTFkEIp+HxMek1eH1fA1zFo0DPD3uqUez+v2gy/IfZF2eLu9DcEj7Exk532hxfHJi/2oZ0GQYHlhg/dQ==}
-    dev: false
-
   /levn/0.3.0:
     resolution: {integrity: sha1-OwmSTt+fCDwEkP3UwLxEIeBHZO4=}
     engines: {node: '>= 0.8.0'}
@@ -1917,7 +1909,7 @@ packages:
     engines: {node: '>= 12'}
     hasBin: true
     dependencies:
-      '@babel/runtime': 7.16.7
+      '@babel/runtime': 7.17.0
       complex.js: 2.0.15
       decimal.js: 10.3.1
       escape-latex: 1.2.0
@@ -2037,8 +2029,8 @@ packages:
     resolution: {integrity: sha1-sGJ44h/Gw3+lMTcysEEry2rhX1E=}
     dev: false
 
-  /negotiator/0.6.2:
-    resolution: {integrity: sha512-hZXc7K2e+PgeI1eDBe/10Ard4ekbfrrqG8Ep+8Jmf4JID2bNg7NvCPOZN+kfF574pFQI7mum2AUqDidoKqcTOw==}
+  /negotiator/0.6.3:
+    resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
     engines: {node: '>= 0.6'}
     dev: true
 
@@ -2534,7 +2526,7 @@ packages:
     resolution: {integrity: sha1-03aNabHn2C5c4FD/9bRTvqEqkjk=}
     engines: {node: '>= 0.8.0'}
     dependencies:
-      accepts: 1.3.7
+      accepts: 1.3.8
       batch: 0.6.1
       debug: 2.6.9
       escape-html: 1.0.3
