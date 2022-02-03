@@ -14,12 +14,13 @@ export interface VAWorker {
 
 export namespace VAWorker {
   export interface Config {
-    readonly worker: Worker
+    readonly workerUrl: string
     readonly options: AnimationStrategy.Animation3D.RenderOptions
     readonly canvas: HTMLCanvasElement
   }
-  export const create = ({ worker, options, canvas }: VAWorker.Config): VAWorker => {
+  export const create = ({ workerUrl, options, canvas }: VAWorker.Config): VAWorker => {
     const offscreen = canvasToOffscreen(canvas)
+    const worker = new Worker(workerUrl, { type: 'module' })
     const send = (msg: VAWorker.WorkerMessage, options?: any) => worker.postMessage(msg, options)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     worker.postMessage(VAWorker.WorkerMessage.Init.create(options, offscreen), [offscreen as any])

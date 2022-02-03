@@ -1,4 +1,4 @@
-import { Sound, Rx, VAWorker } from '@va/engine'
+import { Sound, Rx, MultiProcessAnimation } from '@va/engine'
 import { flow, pipe } from 'fp-ts/es6/function'
 
 const analyzerConfig: Sound.AnalysedNode.AnalyserConfig = {
@@ -8,9 +8,8 @@ const analyzerConfig: Sound.AnalysedNode.AnalyserConfig = {
   mute: true
 }
 
-const workerConfig = (worker: Worker, canvas: HTMLCanvasElement) => ({
-  worker,
-  canvas: canvas,
+const mpaConfig: MultiProcessAnimation.Config = {
+  workerUrl: 'worker.js',
   options: {
     cameraOptions: {
       fov: 70,
@@ -25,37 +24,15 @@ const workerConfig = (worker: Worker, canvas: HTMLCanvasElement) => ({
       height: window.innerHeight
     }
   }
-})
+}
 
 export const App3D = () =>
   pipe(
     Sound.createFor(
       flow(
         Sound.AnalysedNode.fromUserMediaToOut(analyzerConfig),
-        Rx.first(),
-        Rx.switchMap(node => {
-          let canvas: HTMLCanvasElement
-          const existing = document.getElementsByTagName('canvas').item(0)
-          if (existing) {
-            canvas = existing
-          } else {
-            canvas = document.createElement('canvas')
-            canvas.width = window.innerWidth
-            canvas.height = window.innerHeight
-            document.body.prepend(canvas)
-          }
-          const _w = new Worker('worker.js', { type: 'module' })
-          const worker = VAWorker.create(workerConfig(_w, canvas))
-          worker.startAnimation('frequencyPlaneStrategy', {})
-
-          const resizeObserver = Rx.fromEvent(window, 'resize').pipe(
-            Rx.tap(() => worker.resize()),
-            Rx.ignoreElements()
-          )
-
-          // TODO: send waveform to worker
-          return Rx.mergeStatic(resizeObserver, node.frequency.pipe(Rx.tap(worker.frequency)))
-        })
+        MultiProcessAnimation.create(mpaConfig),
+        Rx.tap(worker => worker.startAnimation('frequencyPlaneStrategy', {}))
       )
     )
   )

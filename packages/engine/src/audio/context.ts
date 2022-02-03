@@ -29,6 +29,7 @@ export namespace Sound {
     const observableContext =
       context.state !== 'running'
         ? Rx.fromEvent(document, 'mousedown').pipe(
+            Rx.first(),
             Rx.switchMap(() => {
               if (context.state !== 'running') {
                 console.log('Resuming AudioContext on user interaction')
@@ -162,7 +163,7 @@ export namespace Sound {
     export const fromUserMediaToOut =
       (config: AnalyserConfig) =>
       (ctx: AudioContext): Rx.Observable<Sound.AnalysedNode> =>
-        pipe(ctx, AnalysedNode.fromUserMedia(config), connectToOut(config, ctx))
+        pipe(ctx, AnalysedNode.fromUserMedia(config), connectToOut(config, ctx), Rx.first())
 
     /**
      * Creates and observable AnalysedNode from media element (audio or video). It will emit when the element starts playing.
