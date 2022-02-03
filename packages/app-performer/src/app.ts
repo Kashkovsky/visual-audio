@@ -23,7 +23,8 @@ const mpaConfig: MultiProcessAnimation.Config = {
       width: window.innerWidth,
       height: window.innerHeight
     }
-  }
+  },
+  stats: MultiProcessAnimation.Config.Stats.fps
 }
 
 export const App3D = () =>

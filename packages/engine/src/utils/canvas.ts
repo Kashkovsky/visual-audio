@@ -4,10 +4,11 @@ import * as O from 'fp-ts/es6/Option'
 
 export const createCanvas: IO<HTMLCanvasElement> = () =>
   pipe(
-    document.getElementsByTagName('canvas').item(0),
+    document.getElementById('va-canvas'),
     O.fromNullable,
     O.getOrElse(() => {
       const canvas = document.createElement('canvas')
+      canvas.id = 'va-canvas'
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
       document.body.prepend(canvas)

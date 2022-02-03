@@ -82,10 +82,12 @@ importers:
       '@ffmpeg/core': ^0.10.0
       '@ffmpeg/ffmpeg': ^0.10.1
       '@types/node': ^16.7.1
+      '@types/stats.js': ~0.17.0
       '@types/three': ^0.137.0
       fp-ts: ^2.11.1
       mathjs: ^9.5.0
       rxjs: ^7.5.2
+      stats.js: ~0.17.0
       three: ^0.137.5
       typescript: ^4.4.3
     dependencies:
@@ -94,9 +96,11 @@ importers:
       fp-ts: 2.11.8
       mathjs: 9.5.2
       rxjs: 7.5.2
+      stats.js: 0.17.0
       three: 0.137.5
     devDependencies:
       '@types/node': 16.11.22
+      '@types/stats.js': 0.17.0
       '@types/three': 0.137.0
       typescript: 4.5.5
 
@@ -313,6 +317,10 @@ packages:
     resolution: {integrity: sha512-f0KEEe05NvUnat+boPTZ0dgaLZ4SfSouXUgv5noUiefG2ajgKjmETo9ZJyuqsl7dfl2aHlLJUiki6B4ZYldiiw==}
     dependencies:
       '@types/node': 16.11.22
+    dev: true
+
+  /@types/stats.js/0.17.0:
+    resolution: {integrity: sha512-9w+a7bR8PeB0dCT/HBULU2fMqf6BAzvKbxFboYhmDtDkKPiyXYbjoe2auwsXlEFI7CFNMF1dCv3dFH5Poy9R1w==}
     dev: true
 
   /@types/three/0.137.0:
@@ -2777,6 +2785,10 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /stats.js/0.17.0:
+    resolution: {integrity: sha1-scPcRtlEmLV4t/05hbgaznExzH0=}
+    dev: false
 
   /statuses/1.5.0:
     resolution: {integrity: sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=}
