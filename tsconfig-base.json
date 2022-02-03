@@ -23,6 +23,8 @@
     "strictNullChecks": true,
     "incremental": true,
     "noImplicitAny": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
     "lib": ["es2017.object", "es6", "es2016", "dom", "scripthost"]
   }
 }
