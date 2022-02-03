@@ -5,9 +5,11 @@ import { Dimensions } from '../geometry'
 import { flow } from 'fp-ts/es6/function'
 import * as O from 'fp-ts/es6/Option'
 import { canvasToOffscreen } from '../utils'
+
 export interface VAWorker {
   resize: (dimensions?: Dimensions) => void
   frequency: (data: AnalysisData.Frequency) => void
+  startAnimation: (name: string, config?: unknown) => void
 }
 
 export namespace VAWorker {
@@ -29,7 +31,8 @@ export namespace VAWorker {
         O.getOrElse(VAWorker.WorkerMessage.Size.fromWindowSize),
         send
       ),
-      frequency: flow(VAWorker.WorkerMessage.Frequency.create, send)
+      frequency: flow(VAWorker.WorkerMessage.Frequency.create, send),
+      startAnimation: flow(VAWorker.WorkerMessage.Start.create, send)
     }
   }
   export type WorkerMessage<TCOnfig = unknown> =
@@ -87,7 +90,18 @@ export namespace VAWorker {
     export interface Start<TCOnfig = unknown> {
       readonly kind: 'start'
       readonly strategy: string
-      readonly config: TCOnfig
+      readonly config?: TCOnfig
+    }
+
+    export namespace Start {
+      export const create = <TConfig = unknown>(
+        strategy: string,
+        config?: TConfig
+      ): VAWorker.WorkerMessage.Start<TConfig> => ({
+        kind: 'start',
+        strategy,
+        config
+      })
     }
   }
 }

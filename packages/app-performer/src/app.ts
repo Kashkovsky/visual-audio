@@ -37,18 +37,18 @@ export const App3D = (): Rx.Observable<AnalysisData.Frequency> =>
           canvas.height = window.innerHeight
           document.body.prepend(canvas)
           const _w = new Worker('worker.js', { type: 'module' })
-
           const worker = VAWorker.create(workerConfig(_w, canvas))
+
+          worker.startAnimation('frequencyPlaneStrategy', {})
 
           const resizeObserver = Rx.fromEvent(window, 'resize').pipe(
             Rx.tap(() => worker.resize()),
             Rx.ignoreElements()
           )
 
+          // TODO: send waveform to worker
           return Rx.mergeStatic(resizeObserver, n.frequency.pipe(Rx.tap(worker.frequency)))
         })
-        // Sound.AnalysedNode.attachAnimation(animation),
-        // AnimationStrategy.Animation3D.toScene(renderOptions)
       )
     )
   )

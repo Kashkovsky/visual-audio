@@ -38,7 +38,7 @@ export namespace AnimationStrategy {
       readonly scene: THREE.Scene
       readonly camera: THREE.PerspectiveCamera
       readonly renderer: THREE.Renderer
-      readonly canvas: HTMLCanvasElement
+      readonly canvas: THREE.OffscreenCanvas
     }
 
     export interface RenderOptions {
