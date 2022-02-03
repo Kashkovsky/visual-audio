@@ -1,8 +1,8 @@
 import { RxAnimation, AnimationStrategy } from '@va/engine'
 import { pipe } from 'fp-ts/es6/function'
-import * as THREE from 'three'
 import fragment from './shaders/fragment.glsl'
 import vertex from './shaders/vertex.glsl'
+import * as THREE from 'three'
 
 export interface FrequencyPlaneConfig {
   /**
@@ -38,7 +38,7 @@ export const frequencyPlaneStrategy =
   audio =>
   env => {
     const planeGeometry = new THREE.PlaneBufferGeometry(1, 1, 64, 64)
-    const imageSize = 522
+    const imageSize = 512
     const material = new THREE.ShaderMaterial({
       side: THREE.DoubleSide,
       fragmentShader: fragment,

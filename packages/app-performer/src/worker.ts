@@ -2,9 +2,9 @@ import { AnalysisData, AnimationStrategy, Dimensions, Rx, VAWorker } from '@va/e
 import { pipe } from 'fp-ts/es6/function'
 import * as RE from 'fp-ts/es6/ReaderEither'
 import * as E from 'fp-ts/es6/Either'
-import * as visuals from '@va/visuals'
+import * as visuals from './strategy'
 import * as O from 'fp-ts/es6/Option'
-const THREE = require('three')
+import * as THREE from 'three'
 
 interface State {
   env: O.Option<AnimationStrategy.Animation3D.Environment>

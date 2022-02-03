@@ -1,4 +1,5 @@
 const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
   entry: {
@@ -20,7 +21,10 @@ module.exports = {
   },
   devServer: {
     static: './dist',
-    compress: true,
+    // compress: true,
+    // hot: false,
+    // liveReload: true,
+    open: true,
     client: {
       progress: true,
       overlay: {
@@ -32,9 +36,9 @@ module.exports = {
   resolve: {
     alias: {
       '@va/engine': path.resolve(__dirname, '../engine/lib'),
-      '@va/visuals': path.resolve(__dirname, '../visuals/lib'),
       '@va/components': path.resolve(__dirname, '../components/lib')
-    }
+    },
+    fallback: { crypto: require.resolve('crypto-browserify') }
   },
   module: {
     rules: [
@@ -53,6 +57,12 @@ module.exports = {
       }
     ]
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      title: 'VA Performer',
+      template: 'index.html'
+    })
+  ],
   resolve: {
     extensions: ['.tsx', '.ts', '.js', '.glsl']
   }

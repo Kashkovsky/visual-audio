@@ -31,7 +31,7 @@ export namespace UserMediaUtils {
         videoTexture.generateMipmaps = false
         videoTexture.minFilter = THREE.NearestFilter
         videoTexture.magFilter = THREE.NearestFilter
-        videoTexture.format = THREE.RGBFormat
+        videoTexture.format = THREE.RGBAFormat
         return videoTexture
       })
     )
