@@ -27,13 +27,14 @@ const mpaConfig: MultiProcessAnimation.Config = {
   stats: MultiProcessAnimation.Config.Stats.fps
 }
 
-export const App3D = () =>
+export const App3D = (): Rx.Observable<MediaStream> =>
   pipe(
     Sound.createFor(
       flow(
         Sound.AnalysedNode.fromUserMediaToOut(analyzerConfig),
         MultiProcessAnimation.create(mpaConfig),
-        Rx.tap(worker => worker.startAnimation('frequencyPlaneStrategy', {}))
+        Rx.tap(({ worker }) => worker.startAnimation('frequencyPlaneStrategy', {})),
+        Rx.map(p => p.stream)
       )
     )
   )

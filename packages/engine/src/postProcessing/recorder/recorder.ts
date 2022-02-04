@@ -6,15 +6,16 @@ import * as NEA from 'fp-ts/es6/NonEmptyArray'
 import * as A from 'fp-ts/es6/Array'
 import * as O from 'fp-ts/es6/Option'
 import * as E from 'fp-ts/es6/Either'
-
+import { fetchFile, FFmpeg as FF } from '@ffmpeg/ffmpeg'
 export interface Recorder {
   readonly events: Recorder.Events
   readonly start: IO<void>
   readonly stop: IO<void>
-  readonly record: (state: Rx.Observable<boolean>) => Rx.Observable<Blob[]>
+  readonly record: (state: Rx.Observable<boolean>) => Rx.Observable<Uint8Array>
 }
 
 export namespace Recorder {
+  export type FFMpeg = FF
   const types = {
     audio: ['webm', 'ogg', 'mp3'],
     video: ['webm', 'ogg', 'mp4']
@@ -56,60 +57,86 @@ export namespace Recorder {
       E.fromOption(() => new Error('Could not find any supported MIME type'))
     )
 
-  export const create = (stream: MediaStream): E.Either<Error, Recorder> =>
-    pipe(
-      getSupportedMime(),
-      E.map(mimeType => {
-        console.log('MIME chosen', mimeType)
-        const recorder = new MediaRecorder(stream, {
-          mimeType,
-          audioBitsPerSecond: 128000,
-          videoBitsPerSecond: 5000000
-        })
-        const events = Recorder.Events.create(recorder)
+  export const create =
+    (ffmpeg: Rx.Observable<Recorder.FFMpeg>) =>
+    (stream: MediaStream): E.Either<Error, Recorder> =>
+      pipe(
+        getSupportedMime(),
+        E.map(mimeType => {
+          console.log('MIME chosen', mimeType)
+          const recorder = new MediaRecorder(stream, {
+            mimeType,
+            videoBitsPerSecond: 3000000
+          })
+          const events = Recorder.Events.create(recorder)
+          const name = 'recording.webm'
+          return {
+            events,
+            start: () => recorder.start(3000),
+            stop: () => recorder.stop(),
+            record: state => {
+              const recordStream = events.started.pipe(
+                Rx.switchMap(() =>
+                  events.dataAvailable.pipe(
+                    Rx.map(e => e.data),
+                    Rx.filter(data => data.size > 0),
+                    Rx.bufferWhen(() => events.stopped),
+                    Rx.take(1)
+                  )
+                ),
+                Rx.map(
+                  chunks =>
+                    new Blob(chunks, {
+                      type: mimeType.split(';')[0]
+                    })
+                ),
+                Rx.switchMap(blob => Rx.from(fetchFile(blob))),
+                Rx.withLatestFrom(ffmpeg),
+                Rx.map(([file, ffmpeg]) => (ffmpeg.FS('writeFile', name, file), ffmpeg)),
+                Rx.switchMap(ffmpeg =>
+                  Rx.from(
+                    ffmpeg.run(
+                      '-i',
+                      name,
+                      'recording.mp4',
+                      '-acodec',
+                      'copy',
+                      '-max_muxing_queue_size',
+                      '9999',
+                      '-vf',
+                      'scale=640:480'
+                    )
+                  ).pipe(Rx.mapTo(ffmpeg))
+                ),
+                Rx.map(ffmpeg => ffmpeg.FS('readFile', 'recording.mp4')),
+                Rx.tap(data => {
+                  const blob = new Blob([data.buffer], {
+                    type: 'video/mp4'
+                  })
 
-        return {
-          events,
-          start: () => recorder.start(3000),
-          stop: () => recorder.stop(),
-          record: state => {
-            const recordStream = events.started.pipe(
-              Rx.switchMap(() =>
-                events.dataAvailable.pipe(
-                  Rx.map(e => e.data),
-                  Rx.filter(data => data.size > 0),
-                  Rx.bufferWhen(() => events.stopped),
-                  Rx.take(1)
-                )
-              ),
-              Rx.tap(chunks => {
-                // Download hack
-                const blob = new Blob(chunks, {
-                  type: mimeType.split(';')[0]
+                  const url = URL.createObjectURL(blob)
+                  const a = document.createElement('a')
+                  a.setAttribute('style', 'display: none')
+                  document.body.appendChild(a)
+                  a.href = url
+                  a.download = 'recording.mp4'
+                  a.click()
+                  window.URL.revokeObjectURL(url)
                 })
-                const url = URL.createObjectURL(blob)
-                const a = document.createElement('a')
-                a.setAttribute('style', 'display: none')
-                document.body.appendChild(a)
-                a.href = url
-                a.download = 'test.webm'
-                a.click()
-                window.URL.revokeObjectURL(url)
-              })
-            )
-            const stateSwitch = state.pipe(
-              Rx.tap(enabled =>
-                enabled && recorder.state !== 'recording'
-                  ? recorder.start(3000)
-                  : recorder.state !== 'inactive' && recorder.stop()
-              ),
-              Rx.ignoreElements()
-            )
-            return Rx.mergeStatic(recordStream, stateSwitch)
+              )
+              const stateSwitch = state.pipe(
+                Rx.tap(enabled =>
+                  enabled && recorder.state !== 'recording'
+                    ? recorder.start(3000)
+                    : recorder.state !== 'inactive' && recorder.stop()
+                ),
+                Rx.ignoreElements()
+              )
+              return Rx.mergeStatic(recordStream, stateSwitch)
+            }
           }
-        }
-      })
-    )
+        })
+      )
 
   function getSupportedMimeTypes(media: 'video' | 'audio') {
     const supported: string[] = []

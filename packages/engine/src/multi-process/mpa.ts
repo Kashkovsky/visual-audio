@@ -1,16 +1,24 @@
 import { Sound } from '../audio'
-import { flow } from 'fp-ts/es6/function'
+import { flow, pipe } from 'fp-ts/es6/function'
 import { Reader } from 'fp-ts/es6/Reader'
 import { Rx } from '../rx'
 import { createCanvas } from '../utils'
 import { VAWorker } from './va-worker'
 import * as StatsUI from 'stats.js'
+import * as O from 'fp-ts/es6/Option'
 
 /** Multi-process animation */
 export interface MultiProcessAnimation
-  extends Reader<Rx.Observable<Sound.AnalysedNode<AudioNode>>, Rx.Observable<VAWorker>> {}
+  extends Reader<
+    Rx.Observable<Sound.AnalysedNode>,
+    Rx.Observable<MultiProcessAnimation.Processor>
+  > {}
 
 export namespace MultiProcessAnimation {
+  export interface Processor {
+    readonly worker: VAWorker
+    stream: MediaStream
+  }
   export interface AnimationDescriptor {
     readonly name: string
     readonly config?: unknown
@@ -38,7 +46,8 @@ export namespace MultiProcessAnimation {
     flow(
       Rx.switchMap(node => {
         initStats(config.stats)
-        const worker = flow(createCanvas, createWorkerConfig(config), VAWorker.create)()
+        const canvas = createCanvas()
+        const worker = pipe(canvas, createWorkerConfig(config), VAWorker.create)
         const resizeObserver = Rx.fromEvent(window, 'resize').pipe(
           Rx.tap(() => worker.resize()),
           Rx.ignoreElements()
@@ -47,7 +56,15 @@ export namespace MultiProcessAnimation {
         const frequency = node.frequency.pipe(Rx.tap(worker.frequency), Rx.ignoreElements())
         const waveform = node.waveform.pipe(Rx.tap(worker.waveform), Rx.ignoreElements())
 
-        return Rx.mergeStatic(resizeObserver, frequency, waveform, Rx.of(worker))
+        const stream = canvas.captureStream(60)
+        pipe(
+          node.stream,
+          O.map(audioStream => {
+            audioStream.getAudioTracks().forEach(track => stream.addTrack(track))
+          })
+        )
+
+        return Rx.mergeStatic(resizeObserver, frequency, waveform, Rx.of({ worker, stream }))
       })
     )
 

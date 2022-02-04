@@ -31,6 +31,11 @@ module.exports = {
         errors: true,
         warnings: false
       }
+    },
+    headers: {
+      'Cross-Origin-Embedder-Policy': 'require-corp',
+      'Cross-Origin-Opener-Policy': 'same-origin',
+      'Cross-Origin-Resource-Policy': 'cross-origin'
     }
   },
   resolve: {
