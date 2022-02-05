@@ -24,7 +24,7 @@ export namespace VibrantOx {
   export const create: AnimatedElement.Factory<Config> =
     ({
       distortionFrequency = 5,
-      displasementStrength = 0.02,
+      displasementStrength = 0.2,
       displasementFrequency = 0.2,
       colored = false
     }) =>
@@ -54,6 +54,7 @@ export namespace VibrantOx {
             if ((<THREE.Mesh>x).isMesh) {
               x.geometry.center()
               x.scale.set(0.1, 0.1, 0.1)
+              x.position.x += 0.2
               x.material = material
             }
           })

@@ -64,7 +64,6 @@ const init = (
 }
 
 const start = (message: VAWorker.WorkerMessage.Start) => {
-  console.log('[WOK] start')
   void pipe(
     getAnimation(message),
     E.chain(animation =>
