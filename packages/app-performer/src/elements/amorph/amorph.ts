@@ -1,7 +1,8 @@
 import * as THREE from 'three'
-import * as vertexShader from './shaders/vertex.glsl'
-import * as fragmentShader from './shaders/fragment.glsl'
+import vertexShader from './shaders/vertex.glsl'
+import fragmentShader from './shaders/fragment.glsl'
 import { AnimatedElement } from '../../elements'
+import { Rx } from '@va/engine'
 
 export namespace Amorph {
   export interface Config {
@@ -53,9 +54,9 @@ export namespace Amorph {
         mesh.rotation.y += 0.005 * velocity * rotationFactor
       }
 
-      return {
-        mesh,
+      return Rx.of({
+        elements: [mesh],
         update
-      }
+      })
     }
 }

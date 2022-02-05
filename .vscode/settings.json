@@ -21,6 +21,7 @@
     "**packages/*/tsconfig.tsbuildinfo": true,
     "**dist": true,
     "**packages/*/*.build.log": true,
-    "**packages/*/dist": true
+    "**packages/*/dist": true,
+    "**common/temp": true
   }
 }

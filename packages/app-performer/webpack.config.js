@@ -57,8 +57,8 @@ module.exports = {
         use: 'ts-shader-loader'
       },
       {
-        test: /\.png/,
-        type: 'asset/inline'
+        test: /\.(gltf|glb|png|bin|jpeg)$/,
+        type: 'asset/resource'
       }
     ]
   },

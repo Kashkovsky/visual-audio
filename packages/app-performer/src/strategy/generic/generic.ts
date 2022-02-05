@@ -19,9 +19,14 @@ export const genericStrategy =
     const element = config.element(env)
 
     return pipe(
-      config.source === 'frequency' ? audio.frequency : audio.waveform,
-      Rx.map(AnalysisData.sum),
-      Rx.map(x => x / 200),
-      RxAnimation.draw(element.update)
+      element,
+      Rx.switchMap(element =>
+        pipe(
+          config.source === 'frequency' ? audio.frequency : audio.waveform,
+          Rx.map(AnalysisData.sum),
+          Rx.map(x => x / 200),
+          RxAnimation.draw(element.update)
+        )
+      )
     )
   }

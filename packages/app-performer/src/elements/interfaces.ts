@@ -1,15 +1,15 @@
-import { AnimationStrategy } from '@va/engine'
+import { AnimationStrategy, Rx } from '@va/engine'
 import { Reader } from 'fp-ts/es6/Reader'
 import * as THREE from 'three'
 
 export interface AnimatedElementInstance {
-  readonly mesh: THREE.Mesh
+  readonly elements: ReadonlyArray<THREE.Object3D<THREE.Event>>
   readonly update: (...args: number[]) => void
 }
 
 export type AnimatedElement = Reader<
   AnimationStrategy.Animation3D.Environment,
-  AnimatedElementInstance
+  Rx.Observable<AnimatedElementInstance>
 >
 
 export namespace AnimatedElement {

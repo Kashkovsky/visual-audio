@@ -23,8 +23,8 @@ const mpaConfig: MultiProcessAnimation.Config = {
       width: window.innerWidth,
       height: window.innerHeight
     }
-  },
-  stats: MultiProcessAnimation.Config.Stats.fps
+  }
+  // stats: MultiProcessAnimation.Config.Stats.fps
 }
 
 export const App3D = (): Rx.Observable<MediaStream> =>
@@ -33,7 +33,7 @@ export const App3D = (): Rx.Observable<MediaStream> =>
       flow(
         Sound.AnalysedNode.fromUserMediaToOut(analyzerConfig),
         MultiProcessAnimation.create(mpaConfig),
-        Rx.tap(({ worker }) => worker.startAnimation('frequencyPlaneStrategy', {})),
+        Rx.tap(({ worker }) => worker.startAnimation('bullHeadStrategy', {})),
         Rx.map(p => p.stream)
       )
     )
