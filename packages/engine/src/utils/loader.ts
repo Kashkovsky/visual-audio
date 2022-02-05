@@ -30,18 +30,22 @@ export namespace ResourceLoader {
     ): void
   }
 
+  /**
+   * Loads GLTF/GLB 3d models
+   * @returns {Resource<GLTF>} GLTF resource
+   */
   export const gltf: Reader<string, Resource<GLTF>> = load(new GLTFLoader())
 
-  export const texture: Reader<string, Resource<THREE.Texture>> = load<
-    ImageBitmap,
-    THREE.ImageBitmapLoader,
-    THREE.Texture
-  >(new THREE.ImageBitmapLoader(), image => new THREE.CanvasTexture(image))
+  /**
+   * Loads images
+   * @returns {Resource<THREE.Texture>} image texture resource
+   */
+  export const texture: Reader<string, Resource<THREE.Texture>> = load(
+    new THREE.ImageBitmapLoader(),
+    image => new THREE.CanvasTexture(image)
+  )
 
-  function load<T, TLoader extends Loader<T>, R = T>(
-    loader: TLoader,
-    map: Reader<T, R> = identity as Reader<T, R>
-  ) {
+  function load<T, R = T>(loader: Loader<T>, map: Reader<T, R> = identity as Reader<T, R>) {
     return (url: string): Resource<R> => {
       const value = new Rx.Subject<R>()
       const progress = new Rx.Subject<Resource.Progress>()
