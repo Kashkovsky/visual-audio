@@ -3,7 +3,9 @@ import * as R from 'fp-ts/es6/Reader'
 import { pipe } from 'fp-ts/es6/function'
 import { Rx } from '../rx'
 import * as THREE from 'three'
-import { Dimensions } from '../geometry'
+import { Rect } from '../geometry'
+import { OrbitControls } from 'three-orbitcontrols-ts'
+
 export interface AnimationStrategy {
   readonly animation: AnimationStrategy.Animation
   readonly data: AnalysisData.Combined
@@ -39,6 +41,7 @@ export namespace AnimationStrategy {
       readonly camera: THREE.PerspectiveCamera
       readonly renderer: THREE.Renderer
       readonly canvas: THREE.OffscreenCanvas
+      readonly controls: OrbitControls
     }
 
     export interface RenderOptions {
@@ -51,7 +54,7 @@ export namespace AnimationStrategy {
         readonly far?: number
       }
       readonly rendererOptions?: THREE.WebGLRendererParameters
-      readonly dimensions: Dimensions
+      readonly rect: Rect
     }
 
     /** @deprecated */
@@ -87,7 +90,7 @@ export namespace AnimationStrategy {
             )
 
             const stream = renderer.domElement.captureStream(60)
-
+            const controls = new OrbitControls(camera)
             return Rx.mergeStatic(
               resizeObserver,
               strategy
@@ -95,7 +98,8 @@ export namespace AnimationStrategy {
                   scene,
                   camera,
                   renderer,
-                  canvas: renderer.domElement
+                  canvas: renderer.domElement,
+                  controls
                 })
                 .pipe(
                   Rx.tap(() => {
