@@ -23,9 +23,9 @@ export namespace VibrantOx {
   }
   export const create: AnimatedElement.Factory<Config> =
     ({
-      distortionFrequency = 0.2,
-      displasementStrength = 0.05,
-      displasementFrequency = 0.1,
+      distortionFrequency = 0.1,
+      displasementStrength = 0.02,
+      displasementFrequency = 0.2,
       colored = false
     }) =>
     ({ scene, camera }) =>
@@ -62,7 +62,7 @@ export namespace VibrantOx {
             material.uniforms.vDisplacementFrequency.value = velocity * displasementFrequency
             material.uniforms.vDisplacementStrength.value = 0.2 + velocity * displasementStrength
             material.uniforms.cameraPosition.value = camera.position
-            gltf.scene.rotation.x = velocity * 0.02
+            gltf.scene.rotation.x = velocity * 0.01
           }
 
           return {

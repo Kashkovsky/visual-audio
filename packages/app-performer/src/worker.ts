@@ -60,7 +60,6 @@ const init = (
   self.document = state.proxy
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(fov, rect.width / rect.height, near, far)
-  console.log('[PERSP]', camera instanceof THREE.PerspectiveCamera)
   camera.position.z = 1
   const controls = new OrbitControls(camera, ElementProxyReceiver.asHTMLElement(state.proxy!))
   controls.target.set(0, 0, 0)

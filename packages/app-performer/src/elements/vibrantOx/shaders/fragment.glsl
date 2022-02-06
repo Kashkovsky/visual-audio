@@ -12,6 +12,7 @@ varying vec2 vUv;
 float PI = 3.141592653589793;
 
 @import ../../../utils/shader/perlin4d;
+@import ../../../utils/shader/grayscale;
 
 void main(){
     if (colored)
@@ -25,9 +26,9 @@ void main(){
 		vec2 fakeUv = vec2((angle + PI) / (2. * PI), phi / PI);
 		
 		vec2 uv = vec2(dot(vec3(1.), vNormal), dot(vec3(-1., 0., 1.), vNormal));
-		vec2 mutatingUv = uv + 0.5 * perlin4d(vec4(uv * 5., vTime/100., 0.), vec4(10.));
+		vec2 mutatingUv = fakeUv + 0.5 * perlin4d(vec4(fakeUv * 5., vTime/100., 0.), vec4(10.));
 		vec4 tex = texture2D(vTexture, mutatingUv) * fresnel;
-		gl_FragColor = tex;
+		gl_FragColor = grayscale(tex);
 	}
 	else {
 		float color = vNormal.z * vPerlinStrength * 2.;
