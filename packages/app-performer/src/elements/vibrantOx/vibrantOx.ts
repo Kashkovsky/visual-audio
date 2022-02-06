@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import vertexShader from './shaders/vertex.glsl'
 import fragmentShader from './shaders/fragment.glsl'
 import { AnimatedElement } from '../../elements'
-import model from './assets/ox-model.glb'
+import model from './assets/head.glb'
 import texture from './assets/vibrant-texture.png'
 import { ResourceLoader, Rx } from '@va/engine'
 
@@ -23,9 +23,9 @@ export namespace VibrantOx {
   }
   export const create: AnimatedElement.Factory<Config> =
     ({
-      distortionFrequency = 5,
-      displasementStrength = 0.2,
-      displasementFrequency = 0.2,
+      distortionFrequency = 0.2,
+      displasementStrength = 0.05,
+      displasementFrequency = 0.1,
       colored = false
     }) =>
     ({ scene, camera }) =>
@@ -47,22 +47,22 @@ export namespace VibrantOx {
               vTexture: { value: texture }
             }
           })
-
+          scene.add(new THREE.AmbientLight())
           scene.add(gltf.scene)
-
           gltf.scene.traverse((x: THREE.Mesh) => {
             if ((<THREE.Mesh>x).isMesh) {
               x.geometry.center()
-              x.scale.set(0.1, 0.1, 0.1)
-              x.position.x += 0.2
+              x.scale.set(5, 5, 5)
               x.material = material
             }
           })
 
           const update = (velocity: number) => {
-            material.uniforms.vTime.value += velocity * 0.5
+            material.uniforms.vTime.value += 1
             material.uniforms.vDisplacementFrequency.value = velocity * displasementFrequency
             material.uniforms.vDisplacementStrength.value = 0.2 + velocity * displasementStrength
+            material.uniforms.cameraPosition.value = camera.position
+            gltf.scene.rotation.x = velocity * 0.02
           }
 
           return {

@@ -19,9 +19,13 @@ const mpaConfig: MultiProcessAnimation.Config = {
     rendererOptions: {
       antialias: true
     },
-    dimensions: {
+    rect: {
       width: window.innerWidth,
-      height: window.innerHeight
+      height: window.innerHeight,
+      top: 0,
+      bottom: window.innerHeight,
+      left: 0,
+      right: window.innerWidth
     }
   }
   // stats: MultiProcessAnimation.Config.Stats.fps
