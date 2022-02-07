@@ -3,11 +3,13 @@ import { flow, pipe } from 'fp-ts/es6/function'
 import { Reader } from 'fp-ts/es6/Reader'
 import { Rx } from '../rx'
 import { canvasToOffscreen, createCanvas } from '../utils'
-import { VAWorker } from './va-worker'
+import { VAWorkerClient } from './va-worker/va-worker-client'
 import * as StatsUI from 'stats.js'
 import * as O from 'fp-ts/es6/Option'
 import { ElementProxy } from './orbit-controls/element-proxy'
 import { AnimationStrategy } from '../animation'
+import { GUIClient } from './gui/gui-client'
+import type { GUI as DATGUI } from 'dat.gui'
 
 /** Multi-process animation */
 export interface MultiProcessAnimation
@@ -18,7 +20,7 @@ export interface MultiProcessAnimation
 
 export namespace MultiProcessAnimation {
   export interface Processor {
-    readonly worker: VAWorker
+    readonly worker: VAWorkerClient
     stream: MediaStream
   }
   export interface AnimationDescriptor {
@@ -29,6 +31,7 @@ export namespace MultiProcessAnimation {
   export interface Config {
     readonly workerUrl: string
     readonly options: AnimationStrategy.Animation3D.RenderOptions
+    readonly gui: DATGUI
 
     readonly stats?: Config.Stats
   }
@@ -45,10 +48,11 @@ export namespace MultiProcessAnimation {
     flow(
       Rx.switchMap(node => {
         initStats(config.stats)
-        const worker = VAWorker.createClient(config.workerUrl)
+        const worker = VAWorkerClient.createClient(config.workerUrl)
         const canvas = createCanvas()
-        const proxy = ElementProxy.create(worker)
+        const proxy = ElementProxy.create(worker, canvas)
         const offscreen = canvasToOffscreen(canvas)
+        const gui = GUIClient.create(config.gui, worker)
 
         worker.init(config.options, offscreen, proxy)
 
@@ -68,7 +72,7 @@ export namespace MultiProcessAnimation {
           })
         )
 
-        return Rx.mergeStatic(resizeObserver, frequency, waveform, Rx.of({ worker, stream }))
+        return Rx.mergeStatic(resizeObserver, frequency, waveform, gui, Rx.of({ worker, stream }))
       })
     )
 

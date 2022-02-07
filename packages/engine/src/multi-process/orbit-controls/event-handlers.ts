@@ -29,6 +29,7 @@ const keydownEventHandler = makeSendPropertiesHandler<KeyboardEvent>([
 type SendFn = (data: Event) => void
 
 function wheelEventHandler(event: WheelEvent, sendFn: SendFn) {
+  event.preventDefault()
   wheelEventHandlerImpl(event, sendFn)
 }
 

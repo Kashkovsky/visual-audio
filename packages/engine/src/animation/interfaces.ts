@@ -5,6 +5,7 @@ import { Rx } from '../rx'
 import * as THREE from 'three'
 import { Rect } from '../geometry'
 import { OrbitControls } from 'three-orbitcontrols-ts'
+import { GUIWorker } from '../multi-process'
 
 export interface AnimationStrategy {
   readonly animation: AnimationStrategy.Animation
@@ -42,6 +43,7 @@ export namespace AnimationStrategy {
       readonly renderer: THREE.Renderer
       readonly canvas: THREE.OffscreenCanvas
       readonly controls: OrbitControls
+      readonly gui: GUIWorker
     }
 
     export interface RenderOptions {
@@ -99,7 +101,8 @@ export namespace AnimationStrategy {
                   camera,
                   renderer,
                   canvas: renderer.domElement,
-                  controls
+                  controls,
+                  gui: null as any
                 })
                 .pipe(
                   Rx.tap(() => {

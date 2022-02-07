@@ -1,31 +1,18 @@
-import { AnalysisData } from '../audio'
-import { Rect } from '../geometry'
-import { flow, pipe } from 'fp-ts/es6/function'
+import { AnalysisData } from '../../audio'
+import { Rect } from '../../geometry'
+import { pipe } from 'fp-ts/es6/function'
 import * as O from 'fp-ts/es6/Option'
-import { WorkerMessage } from './worker-message'
-import { AnimationStrategy } from '../animation'
-import { Rx } from '../rx'
-import { ElementProxyReceiver, ProxyManager } from './orbit-controls'
+import { TransportMessage } from '../transport-message'
+import { AnimationStrategy } from '../../animation'
+import { Rx } from '../../rx'
+import { ElementProxyReceiver, ProxyManager } from '../orbit-controls'
 import * as THREE from 'three'
 import * as RE from 'fp-ts/es6/ReaderEither'
 import { OrbitControls } from 'three-orbitcontrols-ts'
-// import { GUI } from 'dat.gui'
 import * as E from 'fp-ts/es6/Either'
+import { GUIWorker } from '../gui/gui-worker'
 
-export interface VAWorker {
-  init: (
-    options: AnimationStrategy.Animation3D.RenderOptions,
-    canvas: THREE.OffscreenCanvas,
-    proxyId: number
-  ) => void
-  resize: (rect?: Rect) => void
-  frequency: (data: AnalysisData.Frequency) => void
-  waveform: (data: AnalysisData.Waveform) => void
-  startAnimation: (name: string, config?: unknown) => void
-  sendEvent: (id: number, data: any) => void
-}
-
-export namespace VAWorker {
+export namespace VAWorkerInstance {
   interface State {
     env: O.Option<AnimationStrategy.Animation3D.Environment>
     readonly frequency: Rx.Subject<AnalysisData.Frequency>
@@ -33,30 +20,17 @@ export namespace VAWorker {
     readonly size: Rx.Subject<Rect>
     proxy?: ElementProxyReceiver
   }
-  export const createClient = (workerUrl: string): VAWorker => {
-    const worker = new Worker(workerUrl, { type: 'module' })
-    const send = (msg: WorkerMessage, options?: any) => worker.postMessage(msg, options)
-
-    return {
-      init: flow(WorkerMessage.Init.create, msg => send(msg, [msg.canvas])),
-      resize: flow(
-        O.fromNullable,
-        O.map(WorkerMessage.Size.create),
-        O.getOrElse(WorkerMessage.Size.fromWindowSize),
-        send
-      ),
-      frequency: flow(WorkerMessage.Frequency.create, send),
-      waveform: flow(WorkerMessage.Waveform.create, send),
-      startAnimation: flow(WorkerMessage.Start.create, send),
-      sendEvent: flow(WorkerMessage.Event.create, send)
-    }
-  }
 
   // FIXME: Hacky code bellow
   export const createInstance = (
-    getAnimation: RE.ReaderEither<WorkerMessage.Start, Error, AnimationStrategy.AnimationFactory>
-  ): ((e: MessageEvent<WorkerMessage>) => void) => {
+    getAnimation: RE.ReaderEither<
+      TransportMessage.UI.Start,
+      Error,
+      AnimationStrategy.AnimationFactory
+    >
+  ): ((e: MessageEvent<TransportMessage.UI>) => void) => {
     const proxyManager = new ProxyManager()
+    const gui = GUIWorker.create()
     const state: State = {
       env: O.none,
       frequency: new Rx.Subject<AnalysisData.Frequency>(),
@@ -82,7 +56,6 @@ export namespace VAWorker {
       // @ts-ignore
       self.document = state.proxy
       const scene = new THREE.Scene()
-      //   const gui = new GUI()
       const camera = new THREE.PerspectiveCamera(fov, rect.width / rect.height, near, far)
       camera.position.z = 1
       const controls = new OrbitControls(camera, ElementProxyReceiver.asHTMLElement(state.proxy!))
@@ -108,10 +81,10 @@ export namespace VAWorker {
         )
         .subscribe()
 
-      state.env = O.some({ renderer, scene, canvas, camera, controls })
+      state.env = O.some({ renderer, scene, canvas, camera, controls, gui })
     }
 
-    const start = (message: WorkerMessage.Start) => {
+    const start = (message: TransportMessage.UI.Start) => {
       void pipe(
         getAnimation(message),
         E.chain(factory =>
@@ -134,7 +107,7 @@ export namespace VAWorker {
       )
     }
 
-    return (e: MessageEvent<WorkerMessage>) => {
+    return (e: MessageEvent<TransportMessage.UI>) => {
       switch (e.data.kind) {
         case 'init':
           init(e.data.canvas, e.data.options, e.data.proxyId)
@@ -153,6 +126,9 @@ export namespace VAWorker {
           break
         case 'event':
           proxyManager.handleEvent(e.data)
+          break
+        case 'update-property':
+          gui.update(e.data.property, e.data.value)
           break
         default:
           break

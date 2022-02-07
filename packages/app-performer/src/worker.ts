@@ -1,11 +1,11 @@
-import { AnimationStrategy, VAWorker, WorkerMessage } from '@va/engine'
+import { AnimationStrategy, TransportMessage, VAWorkerInstance } from '@va/engine'
 import { pipe } from 'fp-ts/es6/function'
 import * as RE from 'fp-ts/es6/ReaderEither'
 import * as E from 'fp-ts/es6/Either'
 import * as visuals from './strategy'
 
 const getAnimation: RE.ReaderEither<
-  WorkerMessage.Start,
+  TransportMessage.UI.Start,
   Error,
   AnimationStrategy.AnimationFactory
 > = ({ strategy, config }) =>
@@ -15,6 +15,6 @@ const getAnimation: RE.ReaderEither<
     E.map(s => s(config))
   )
 
-const handleMessage = VAWorker.createInstance(getAnimation)
+const handleMessage = VAWorkerInstance.createInstance(getAnimation)
 
 self.addEventListener('message', handleMessage)

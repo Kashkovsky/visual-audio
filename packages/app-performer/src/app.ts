@@ -1,5 +1,6 @@
 import { Sound, Rx, MultiProcessAnimation } from '@va/engine'
 import { flow, pipe } from 'fp-ts/es6/function'
+import { GUI } from 'dat.gui'
 
 const analyzerConfig: Sound.AnalysedNode.AnalyserConfig = {
   minDecibels: -90,
@@ -10,6 +11,7 @@ const analyzerConfig: Sound.AnalysedNode.AnalyserConfig = {
 
 const mpaConfig: MultiProcessAnimation.Config = {
   workerUrl: 'worker.js',
+  gui: new GUI({ hideable: true }),
   options: {
     cameraOptions: {
       fov: 70,

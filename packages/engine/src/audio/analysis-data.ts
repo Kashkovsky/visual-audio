@@ -6,7 +6,7 @@ import { Opaque } from '../utils'
 import { mean as Mean, sum as Sum } from 'mathjs'
 import { Endomorphism } from 'fp-ts/es6/Endomorphism'
 import { Predicate } from 'fp-ts/es6/Predicate'
-import { Rx } from 'rx'
+import { Rx } from '../rx'
 
 export type AnalysisData = AnalysisData.Frequency | AnalysisData.Waveform
 

@@ -8,6 +8,7 @@ importers:
   ../../packages/app-performer:
     specifiers:
       '@grammarly/focal': ^0.8.5
+      '@types/dat.gui': ~0.7.7
       '@types/node': ^16.7.1
       '@types/react': ^17.0.35
       '@types/react-dom': ^17.0.11
@@ -16,6 +17,7 @@ importers:
       '@va/engine': workspace:*
       concurrently: ^7.0.0
       crypto-browserify: ^3.12.0
+      dat.gui: ~0.7.7
       fp-ts: ^2.11.1
       html-webpack-plugin: ^5.5.0
       react: ^17.0.2
@@ -33,12 +35,14 @@ importers:
       '@va/components': link:../components
       '@va/engine': link:../engine
       crypto-browserify: 3.12.0
+      dat.gui: 0.7.7
       fp-ts: 2.11.8
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       three: 0.137.5
       three-orbitcontrols-ts: github.com/nicolaspanel/three-orbitcontrols-ts/b5b2685a88b880822c62275f2a76bdaa3954f76c
     devDependencies:
+      '@types/dat.gui': 0.7.7
       '@types/node': 16.11.22
       '@types/react': 17.0.39
       '@types/react-dom': 17.0.11

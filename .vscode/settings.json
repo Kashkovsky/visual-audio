@@ -22,6 +22,7 @@
     "**dist": true,
     "**packages/*/*.build.log": true,
     "**packages/*/dist": true,
-    "**common/temp": true
+    "**common/temp": true,
+    "**/*/.DS_Store": true
   }
 }

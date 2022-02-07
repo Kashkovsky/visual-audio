@@ -22,7 +22,8 @@
     "@grammarly/focal": "^0.8.5",
     "three": "^0.137.5",
     "three-orbitcontrols-ts": "git+https://git@github.com/nicolaspanel/three-orbitcontrols-ts.git",
-    "crypto-browserify": "^3.12.0"
+    "crypto-browserify": "^3.12.0",
+    "dat.gui": "~0.7.7"
   },
   "devDependencies": {
     "@types/node": "^16.7.1",
@@ -36,7 +37,8 @@
     "ts-loader": "^9.2.6",
     "ts-shader-loader": "^1.0.6",
     "concurrently": "^7.0.0",
-    "html-webpack-plugin": "^5.5.0"
+    "html-webpack-plugin": "^5.5.0",
+    "@types/dat.gui": "~0.7.7"
   },
   "resolutions": {
     "set-value": "4.0.1"
