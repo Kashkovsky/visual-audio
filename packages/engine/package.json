@@ -28,14 +28,16 @@
     "rxjs": "^7.5.2",
     "three": "^0.137.5",
     "stats.js": "~0.17.0",
-    "three-orbitcontrols-ts": "git+https://git@github.com/nicolaspanel/three-orbitcontrols-ts.git"
+    "three-orbitcontrols-ts": "git+https://git@github.com/nicolaspanel/three-orbitcontrols-ts.git",
+    "dat.gui": "~0.7.7"
   },
   "devDependencies": {
     "@types/node": "^16.7.1",
     "@types/three": "^0.137.0",
     "typescript": "^4.4.3",
     "@types/stats.js": "~0.17.0",
-    "patch-package": "~6.4.7"
+    "patch-package": "~6.4.7",
+    "@types/dat.gui": "~0.7.7"
   },
   "resolutions": {
     "set-value": "4.0.1"

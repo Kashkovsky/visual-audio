@@ -6,12 +6,13 @@ import { createFFmpeg } from '@ffmpeg/ffmpeg'
 
 export interface RecorderSwitchProps {
   readonly children: Rx.Observable<MediaStream>
+  readonly armed?: boolean
 }
 
-export const RecorderSwitch = ({ children }: RecorderSwitchProps): JSX.Element => {
+export const RecorderSwitch = ({ children, armed }: RecorderSwitchProps): JSX.Element => {
   const enabled = Atom.create(false)
   const ff = createFFmpeg({ log: true })
-  const ffmpeg = Rx.from(ff.load()).pipe(Rx.mapTo(ff))
+  const ffmpeg = armed ? Rx.from(ff.load()).pipe(Rx.mapTo(ff)) : Rx.of(ff)
 
   return (
     <F.Fragment>

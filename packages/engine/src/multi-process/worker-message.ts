@@ -9,7 +9,6 @@ export type WorkerMessage<TCOnfig = unknown> =
   | WorkerMessage.Size
   | WorkerMessage.Start<TCOnfig>
   | WorkerMessage.Event
-  | WorkerMessage.MakeProxy
 
 export namespace WorkerMessage {
   export interface Init {
@@ -107,18 +106,6 @@ export namespace WorkerMessage {
       kind: 'event',
       id,
       data
-    })
-  }
-
-  export interface MakeProxy {
-    readonly kind: 'makeProxy'
-    readonly id: number
-  }
-
-  export namespace MakeProxy {
-    export const create = (id: number): WorkerMessage.MakeProxy => ({
-      kind: 'makeProxy',
-      id
     })
   }
 }

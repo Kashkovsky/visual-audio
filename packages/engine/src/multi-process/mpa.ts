@@ -45,7 +45,7 @@ export namespace MultiProcessAnimation {
     flow(
       Rx.switchMap(node => {
         initStats(config.stats)
-        const worker = VAWorker.create(config.workerUrl)
+        const worker = VAWorker.createClient(config.workerUrl)
         const canvas = createCanvas()
         const proxy = ElementProxy.create(worker)
         const offscreen = canvasToOffscreen(canvas)

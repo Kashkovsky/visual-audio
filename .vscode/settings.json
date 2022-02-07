@@ -14,14 +14,14 @@
   "prettier.configPath": ".prettierrc",
   "typescript.tsdk": "node_modules/typescript/lib",
   "files.exclude": {
-    "**packages/*/lib": false,
-    "**node_modules": false,
-    "**.parcel-cache": false,
-    "**packages/*/node_modules": false,
-    "**packages/*/tsconfig.tsbuildinfo": false,
-    "**dist": false,
-    "**packages/*/*.build.log": false,
-    "**packages/*/dist": false,
-    "**common/temp": false
+    "**packages/*/lib": true,
+    "**node_modules": true,
+    "**.parcel-cache": true,
+    "**packages/*/node_modules": true,
+    "**packages/*/tsconfig.tsbuildinfo": true,
+    "**dist": true,
+    "**packages/*/*.build.log": true,
+    "**packages/*/dist": true,
+    "**common/temp": true
   }
 }

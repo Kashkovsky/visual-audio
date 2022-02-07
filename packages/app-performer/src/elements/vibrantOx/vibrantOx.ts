@@ -34,6 +34,7 @@ export namespace VibrantOx {
         ResourceLoader.texture(texture).value
       ]).pipe(
         Rx.map(([gltf, texture]) => {
+          camera.position.set(-0.671217770449536, -0.7254989367485515, 1.7387115912104119)
           const material = new THREE.ShaderMaterial({
             vertexShader,
             fragmentShader,
@@ -45,13 +46,16 @@ export namespace VibrantOx {
               cameraPosition: { value: camera.position },
               colored: { value: colored },
               vTexture: { value: texture }
-            }
+            },
+            dithering: true
           })
           scene.add(new THREE.AmbientLight())
           scene.add(gltf.scene)
+
           gltf.scene.traverse((x: THREE.Mesh) => {
             if ((<THREE.Mesh>x).isMesh) {
               x.geometry.center()
+              x.geometry.merge
               x.scale.set(5, 5, 5)
               x.material = material
             }

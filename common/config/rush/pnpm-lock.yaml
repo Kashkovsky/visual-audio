@@ -85,9 +85,11 @@ importers:
     specifiers:
       '@ffmpeg/core': ^0.10.0
       '@ffmpeg/ffmpeg': ^0.10.1
+      '@types/dat.gui': ~0.7.7
       '@types/node': ^16.7.1
       '@types/stats.js': ~0.17.0
       '@types/three': ^0.137.0
+      dat.gui: ~0.7.7
       fp-ts: ^2.11.1
       mathjs: ^9.5.0
       patch-package: ~6.4.7
@@ -99,6 +101,7 @@ importers:
     dependencies:
       '@ffmpeg/core': 0.10.0
       '@ffmpeg/ffmpeg': 0.10.1
+      dat.gui: 0.7.7
       fp-ts: 2.11.8
       mathjs: 9.5.2
       rxjs: 7.5.2
@@ -106,6 +109,7 @@ importers:
       three: 0.137.5
       three-orbitcontrols-ts: github.com/nicolaspanel/three-orbitcontrols-ts/b5b2685a88b880822c62275f2a76bdaa3954f76c
     devDependencies:
+      '@types/dat.gui': 0.7.7
       '@types/node': 16.11.22
       '@types/stats.js': 0.17.0
       '@types/three': 0.137.0
@@ -215,6 +219,10 @@ packages:
     resolution: {integrity: sha512-cdeYyv4KWoEgpBISTxWvqYsVy444DOqehiF3fM3ne10AmJ62RSyNkUnxMJXHQWRQQX2eR94m5y1IZyDwBjV9FQ==}
     dependencies:
       '@types/node': 16.11.22
+    dev: true
+
+  /@types/dat.gui/0.7.7:
+    resolution: {integrity: sha512-CxLCme0He5Jk3uQwfO/fGZMyNhb/ypANzqX0yU9lviBQMlen5SOvQTBQ/Cd9x5mFlUAK5Tk8RgvTyLj1nYkz+w==}
     dev: true
 
   /@types/eslint-scope/3.7.3:
@@ -1081,6 +1089,10 @@ packages:
   /csstype/3.0.10:
     resolution: {integrity: sha512-2u44ZG2OcNUO9HDp/Jl8C07x6pU/eTR3ncV91SiK3dhG9TWvRVsCoJw14Ckx5DgWkzGA3waZWO3d7pgqpUI/XA==}
     dev: true
+
+  /dat.gui/0.7.7:
+    resolution: {integrity: sha512-sRl/28gF/XRC5ywC9I4zriATTsQcpSsRG7seXCPnTkK8/EQMIbCu5NPMpICLGxX9ZEUvcXR3ArLYCtgreFoMDw==}
+    dev: false
 
   /date-fns/2.28.0:
     resolution: {integrity: sha512-8d35hViGYx/QH0icHYCeLmsLmMUheMmTyV9Fcm6gvNwdw31yXXH+O85sOBJ+OLnLQMKZowvpKb6FgMIQjcpvQw==}
